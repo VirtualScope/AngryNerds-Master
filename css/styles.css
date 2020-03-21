@@ -4,20 +4,21 @@ html, body {
 
 .myRegion{
     width: 250px;
-    height: 1000px;
-    background-color: rgb(204, 204, 204);
+    height: 1000px;    
     padding-top: 15px;
-    margin-top: 100px;
+    border-color: rgb(210, 210, 210);   
+    margin-top: 25px; 
 }
 
-.center{
-    margin: 0 auto;
-    text-align: center;
+.center{    
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;    
 }
 
 .myCard{
     width: 540px;
-    height: auto;
+    height: auto;    
     margin-bottom: 15px;
 }
 

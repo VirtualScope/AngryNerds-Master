@@ -7,8 +7,8 @@ echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 include("includes/bootstrap.php");
 
 // Include Header/Footer.
-include("includes/header.php");
-include("includes/footer.php");
+//include("includes/header.php");
+//include("includes/footer.php");
 
 ?>
 
@@ -18,7 +18,7 @@ include("includes/footer.php");
 <body>
 
     <!-- Scrollable Region -->
-    <div class="col-8 myRegion center scrollable align-middle">
+    <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6">
 
             <?php
 
