@@ -1,0 +1,27 @@
+html, body {
+    height: 100%;
+    background-color: crimson;
+  }
+
+.myRegion{
+    width: 250px;
+    height: 1000px;
+    background-color: rgb(204, 204, 204);
+    padding-top: 15px;
+    margin-top: 100px;
+}
+
+.center{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.myCard{
+    width: 540px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.scrollable{
+    overflow-y: auto;
+}
