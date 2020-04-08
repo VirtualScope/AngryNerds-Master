@@ -25,3 +25,7 @@ html, body {
 .scrollable{
     overflow-y: auto;
 }
+
+.post_content_input{
+    margin-left: 0px;
+}
