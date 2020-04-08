@@ -100,7 +100,7 @@ function displayUserPost($content, $title, $created_date, $created_by, $image){
     
         <!-- Picture -->
         <div class="col-sm-4" style="margin: auto;">
-          <img src="images/ImageNotFound.png" class="card-img" alt="...">
+          <img src="images/cat.jpg" class="card-img" alt="...">
         </div>
       </div>
     
