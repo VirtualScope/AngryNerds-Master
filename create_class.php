@@ -43,54 +43,40 @@ DEFINE('DATABASE_PASSWORD', '');
 
     <div class="container">
         <div class="py-5 text-center">
-            <h2>Create Post</h2>
-            <p class="lead">Share your content with the world.</p>
+            <h2>Create Class</h2>
+            <p class="lead">A place for users to create and share content.</p>
         </div>
 
         <!-- Input fields -->
         <div class="col-12 order-md-1">
             <form class="needs-validation" novalidate="">
-                <!-- Post Title -->
+                <!-- Class Name -->
                 <div class="col-md-6 mb-3">
-                    <label for="postTitle">Title</label>
-                    <input type="text" class="form-control" id="postTitle" placeholder="" value="" required="">
+                    <label for="ClassName">Name</label>
+                    <input type="text" class="form-control" id="ClassName" placeholder="" value="" required="">
                     <div class="invalid-feedback">
-                        Valid post title is required.
+                        Valid class name is required.
                     </div>
                 </div>
-                <!-- Post Content -->
+                <!-- Class Content -->
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="postContent">Content</label>
-                        <textarea class="form-control" rows="5" id="postContent" placeholder="" value="" required=""></textarea>
+                        <label for="ClassDescription">Description</label>
+                        <textarea class="form-control" rows="5" id="ClassDescription" placeholder="" value="" required=""></textarea>
                         <div class="invalid-feedback">
-                            Valid post content is required.
+                            Valid class description is required.
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label>Associated class</label><br>
-                    <select class="custom-select d-block w-100" id="class" required="">
-                        <option value="">Choose...</option>
-                        <option>ICS 325-A</option>
-                        <option>ICS 325-B</option>
-                        <option>ICS 325-C</option>
-                    </select>
-                    <div class="invalid-feedback">
-                        Valid associated class is required.
-                    </div>
-                </div>
-
                 <!-- Image -->
-                <br>
                 <div class="col-md-6 mb-3">
                     <label>Image</label>
                     <div class="custom-file mb-3">
                         <input type="file" class="custom-file-input" id="customFile" name="filename" required="true">
                         <label class="custom-file-label" for="customFile">Choose file</label>
                         <div class="invalid-feedback">
-                            Valid post image is required.
+                            Valid class image is required.
                         </div>
                     </div>
                 </div>
@@ -98,7 +84,7 @@ DEFINE('DATABASE_PASSWORD', '');
                 <!-- Submit button -->
                 <hr class="mb-4">
                 <div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Post!</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Create!</button>
                 </div>
             </form>
         </div>
