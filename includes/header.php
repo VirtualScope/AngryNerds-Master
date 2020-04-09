@@ -5,7 +5,7 @@ $loggedIn = false; # Temporary override code to make the front-end work.
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 <div class="container">
-  <a class="navbar-brand" href="<?php echo $homepath?>"><img src="<?php echo $homepath?>images/logo2.png" width=140 height=30></a>
+  <a class="navbar-brand" href="<?php echo $homepath . 'home_page.php'?>"><img src="<?php echo $homepath?>images/logo2.png" width=140 height=30></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
