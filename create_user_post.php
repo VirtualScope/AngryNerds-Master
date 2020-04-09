@@ -5,6 +5,9 @@
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 
+// Include Header
+include("includes/header.php");
+
 // Include bootstrap library.
 include("includes/bootstrap.php");
 
@@ -141,3 +144,7 @@ DEFINE('DATABASE_PASSWORD', '');
 </body>
 
 </html>
+<?php
+// Include Footer
+include("includes/footer.php");
+?>
