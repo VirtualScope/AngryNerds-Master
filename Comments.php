@@ -4,6 +4,7 @@
 
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
+include("includes/header.php");
 
 // Include bootstrap library.
 include("includes/bootstrap.php");
@@ -122,5 +123,5 @@ function displayUserPost($content, $title, $created_date, $created_by, $image){
     
     ';
 }
-
+include("includes/footer.php");
 ?>
