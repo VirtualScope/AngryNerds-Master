@@ -2,6 +2,9 @@
 
 // Include bootstrap library.
 //include("includes/bootstrap.php");
+// Include Header
+include("includes/header.php");
+
 
 ?>
 
@@ -40,3 +43,7 @@
   </div>
 
 </div>
+<?php
+// Include Footer
+include("includes/footer.php");
+?>
