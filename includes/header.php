@@ -1,5 +1,6 @@
 <?php 
 $homepath = 'http://'.$_SERVER['SERVER_NAME'].'/';
+$loggedIn = false; # Temporary override code to make the front-end work.
 ?>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
