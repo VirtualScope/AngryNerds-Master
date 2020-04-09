@@ -12,14 +12,14 @@ $loggedIn = false; # Temporary override code to make the front-end work.
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo $homepath?>about.php">About</a>
-      </li>
+        <a class="nav-link" href="<?php echo $homepath?>home_page.php">Home</a>
+      </li> <!--
       <li class="nav-item">
         <a class="nav-link" href="<?php echo $homepath?>homepage.php">Experiments</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="<?php echo $homepath?>social.php">Social</a>
-      <!-- TODO
+      TODO
       <li class="nav-item">
         <a class="nav-link" href="<?php echo $homepath?>viewphoto2.php">Archive</a>
       </li>
@@ -48,10 +48,10 @@ $loggedIn = false; # Temporary override code to make the front-end work.
             echo'
         <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" href="'.$homepath.'loginpage.php">Login</a>
+            <a class="nav-link" href="'.$homepath.'login_form.php">Login</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="'.$homepath.'signup.php">Sign up</a>
+            <a class="nav-link" href="'.$homepath.'login_form.php">Sign up</a>
             </li>    
         </ul>';
         }
