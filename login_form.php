@@ -5,6 +5,9 @@
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 
+// Include Header
+include("includes/header.php");
+
 // Include bootstrap library.
 include("includes/bootstrap.php");
 
@@ -29,7 +32,7 @@ DEFINE('DATABASE_PASSWORD', '');
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Login</title>
+    <title>Signin Template for Bootstrap</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
@@ -63,3 +66,7 @@ DEFINE('DATABASE_PASSWORD', '');
 </body>
 
 </html>
+<?php
+// Include Footer
+include("includes/footer.php");
+?>
