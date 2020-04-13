@@ -45,7 +45,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 <!DOCTYPE html>
 <html>
 
-<body>                 
+<body>
 
   <!-- Scrollable Region -->
   <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
@@ -57,7 +57,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
       // ============== Load posts from DB ==============
 
       // Generate SQL
-      $sql = "SELECT * FROM user_post WHERE course_id=" . $_SESSION['courseId']  . "";
+      $sql = "SELECT * FROM user_post WHERE course_id=" . $_SESSION['courseId']  . " ORDER BY created_date DESC";
 
       // Run query.
       $result = $dbcn->query($sql);
@@ -84,12 +84,21 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
           // Output.
           displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $user_id, $image);
         }
+      } else {
+        echo "No posts yet :(";
       }
 
       ?>
 
     </div>
 
+  </div>
+
+  <!-- Create post -->
+  <div class="text-center" style="margin-top:10px">
+    <form action="create_user_post.php">
+      <button type="submit" class="btn btn-primary">Create post</button>
+    </form>
   </div>
 
 </body>
@@ -144,13 +153,13 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
     
       <!-- Reveal Comments -->
       <p>
-        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection'.$userPostId.'" role="button"  aria-controls="commentSection">
+        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection' . $userPostId . '" role="button"  aria-controls="commentSection">
           Comments
         </a>
       </p>
     
       <!-- Comment -->
-      <div class="collapse in" id="commentSection'.$userPostId.'">';
+      <div class="collapse in" id="commentSection' . $userPostId . '">';
 
   // ================= START Comments Section =================
 
@@ -217,12 +226,6 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
     </form>
   </div>
   ';
-
-?>
-
-
-
-<?php
 
   // ================= END Comments Section =================
 
