@@ -2,6 +2,9 @@
 
 // ============== Includes ==============
 
+// Ensure the user is logged in.
+include("includes/authenticate.php");
+
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 // Include Header
@@ -10,13 +13,8 @@ include("includes/header.php");
 // Include bootstrap library.
 include("includes/bootstrap.php");
 
-// ============== DB setup ==============
-
-// DB config.
-DEFINE('DATABASE_HOST', 'localhost');
-DEFINE('DATABASE_DATABASE', 'angrynerdsmaster');
-DEFINE('DATABASE_USER', 'root');
-DEFINE('DATABASE_PASSWORD', '');
+// DB setup
+include("includes/db_config.php");
 
 // ============== Variables ==============
 
