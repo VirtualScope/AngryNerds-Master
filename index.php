@@ -54,76 +54,80 @@ include("includes/db_config.php");
 
     <div class="album py-5 bg-light">
       <div class="container">
-        <?php
+        <div class="row">
 
-        // Load class cards based on what user is logged in.
-        $userId = $_SESSION['userId'];
+          <?php
 
-        // Connect to DB
-        $dbcn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_DATABASE);
-        $dbcn->set_charset("utf8");
-        if (mysqli_connect_errno()) {
-          echo "<p>Error creating database connection.</p>";
-          exit;
-        }
+          // Load class cards based on what user is logged in.
+          $userId = $_SESSION['userId'];
 
-        // Query the DB for classes associated with that user.    
-        $sqlQuery = "SELECT course_id FROM user_course WHERE user_id=$userId";
-        $result = $dbcn->query($sqlQuery);
-        if (!$result) {
-          echo "There was an error loading your classes :{";
-        }
+          // Connect to DB
+          $dbcn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_DATABASE);
+          $dbcn->set_charset("utf8");
+          if (mysqli_connect_errno()) {
+            echo "<p>Error creating database connection.</p>";
+            exit;
+          }
 
-        // If our query was successful...
-        $numRows = $result->num_rows;
-        if ($numRows > 0) {
+          // Query the DB for classes associated with that user.    
+          $sqlQuery = "SELECT course_id FROM user_course WHERE user_id=$userId";
+          $result = $dbcn->query($sqlQuery);
+          if (!$result) {
+            echo "There was an error loading your classes :{";
+          }
 
-          // For each course the user has...
-          for ($i = 0; $i < $numRows; $i++) {
-            // Get the DB row.
-            $row = $result->fetch_assoc();
-            $courseId = $row['course_id'];
+          // If our query was successful...
+          $numRows = $result->num_rows;
+          if ($numRows > 0) {
 
-            // Query the DB for that course...
-            $sqlQuery = "SELECT * FROM courses WHERE id=$courseId";
-            $result = $dbcn->query($sqlQuery);
-            if (!$result) {
-              echo "There was an error loading your class with ID " . $courseId . " :{";
-            }
-
-            // If our query was successful...
-            $coursesFound = $result->num_rows;
-            if ($coursesFound > 0) {
+            // For each course the user has...
+            for ($i = 0; $i < $numRows; $i++) {
               // Get the DB row.
-              $courseRow = $result->fetch_assoc();
-              $courseCode = $courseRow['code'];
-              $courseDescription = $courseRow['description'];
-              $courseImage = $courseRow['image'];
+              $row = $result->fetch_assoc();
+              $courseId = $row['course_id'];
 
-              // Display the course in the list.
-              echo '        
-              <div class="row">
+              // Query the DB for that course...
+              $sqlQuery = "SELECT * FROM courses WHERE id=$courseId";
+              $courseResult = $dbcn->query($sqlQuery);
+              if (!$courseResult) {
+                echo "There was an error loading your class with ID " . $courseId . " :{";
+              }
+
+              // If our query was successful...
+              $coursesFound = $courseResult->num_rows;
+              if ($coursesFound > 0) {
+                // Get the DB row.
+                $courseRow = $courseResult->fetch_assoc();
+                $courseCode = $courseRow['code'];
+                $courseDescription = $courseRow['description'];
+                $courseImage = $courseRow['image'];
+
+                // Display the course in the list.
+                echo '  
                 <div class="col-md-4">
-                  <div class="card mb-4 box-shadow">
-                    <img class="card-img-top" src="images/'.$courseImage.'" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" data-holder-rendered="true">
-                    <div class="card-body">
-                     <p class="card-text"><b>'.$courseCode.'</b>: '.$courseDescription.'</p>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                          <button type="button" class="btn btn-outline-secondary">View Forum</button>
-                        </div>
-                        <small class="text-muted">Jan 20 - May 20</small>
+                <div class="card mb-4 box-shadow">
+                  <img class="card-img-top" src="images/'.$courseImage.'" alt="'. $courseCode .'"  data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+                  <div class="card-body">
+                    <p class="card-text"><b>'. $courseCode .'</b>: '.$courseDescription.'</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                      <button type="button" class="btn btn-outline-secondary">View Forum</button>
                       </div>
+                      <small class="text-muted">Jan 20 - May 20</small>
                     </div>
                   </div>
-                </div>';
+                </div>
+              </div>       
+                ';
+              }
             }
           }
-        }
 
-        ?>
+          ?>
+
+          </div>
+        </div>
       </div>
-    </div>
 
   </main>
 
