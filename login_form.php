@@ -26,7 +26,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    attemptLogin();
+    attemptLogin($dbcn);
 }
 
 ?>
@@ -83,7 +83,7 @@ include("includes/footer.php");
 <?php
 
 // Attempt to log in the user
-function attemptLogin()
+function attemptLogin($dbcn)
 {
     // Define variables.
     $inputEmail = "";
@@ -92,14 +92,6 @@ function attemptLogin()
     // Collect input from the user.
     if (isset($_POST['inputEmail'])) $inputEmail = trim($_POST['inputEmail']);
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
-
-    // Connect to DB
-    $dbcn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_DATABASE);
-    $dbcn->set_charset("utf8");
-    if (mysqli_connect_errno()) {
-        echo "<p>Error creating database connection.</p>";
-        exit;
-    }
 
     // Query the DB for that user.    
     $sqlQuery = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";

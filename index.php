@@ -61,14 +61,6 @@ include("includes/db_config.php");
           // Load class cards based on what user is logged in.
           $userId = $_SESSION['userId'];
 
-          // Connect to DB
-          $dbcn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_DATABASE);
-          $dbcn->set_charset("utf8");
-          if (mysqli_connect_errno()) {
-            echo "<p>Error creating database connection.</p>";
-            exit;
-          }
-
           // Query the DB for classes associated with that user.    
           $sqlQuery = "SELECT course_id FROM user_course WHERE user_id=$userId";
           $result = $dbcn->query($sqlQuery);
