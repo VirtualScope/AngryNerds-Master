@@ -17,13 +17,27 @@ include("includes/db_config.php");
 
 // ============== Variables ==============
 
-$courseId = "";
-
 // ============== Operations ==============
 
 // Find out what course we need to load user posts for.
-if (isset($_POST)) {
-  if (isset($_POST['courseId'])) $courseId = $_POST['courseId'];
+if (isset($_POST['courseId'])) $_SESSION['courseId'] = $_POST['courseId'];
+
+// Insert new comment entry.
+if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id']) && $_POST['new_comment_content'] != "") {
+
+  $sql = "INSERT INTO `user_post_comment`(`user_id`, `user_post_id`, `content`) 
+  VALUES (" . $_SESSION['userId'] . ", " . ($_POST['new_comment_post_id']) . ", '" . ($_POST['new_comment_content']) . "')";
+
+  // Run query.
+  $result = $dbcn->query($sql);
+  if (!$result) {
+    echo ("<p>Failed to save comment :{</p>");
+    exit;
+  }
+
+  // Once the values have been used, clear them to ensure they don't get reposted
+  $_POST['new_comment_post_id'] = null;
+  $_POST['new_comment_content'] = null;
 }
 
 ?>
@@ -31,7 +45,7 @@ if (isset($_POST)) {
 <!DOCTYPE html>
 <html>
 
-<body>
+<body>                 
 
   <!-- Scrollable Region -->
   <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
@@ -43,9 +57,9 @@ if (isset($_POST)) {
       // ============== Load posts from DB ==============
 
       // Generate SQL
-      $sql = "SELECT * FROM user_post WHERE course_id=$courseId";
+      $sql = "SELECT * FROM user_post WHERE course_id=" . $_SESSION['courseId']  . "";
 
-      // Run query, retrieving unfiltered set of words.
+      // Run query.
       $result = $dbcn->query($sql);
       if (!$result) {
         echo ("<p>Failed to load user posts :{</p>");
@@ -130,13 +144,13 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
     
       <!-- Reveal Comments -->
       <p>
-        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection" role="button" aria-expanded="false" aria-controls="commentSection">
+        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection'.$userPostId.'" role="button"  aria-controls="commentSection">
           Comments
         </a>
       </p>
     
       <!-- Comment -->
-      <div class="collapse" id="commentSection">';
+      <div class="collapse in" id="commentSection'.$userPostId.'">';
 
   // ================= START Comments Section =================
 
@@ -184,7 +198,7 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
       }
 
       echo '        
-      <div class="card card-body">
+      <div class="card card-body">      
       <i>' . $commentUserFname . ' ' . $commentUserLname . ' - <small class="text-muted">' . $commentCreatedDate . '</small></i>
       <p>' . $commentContent . '</p>      
       </div>
@@ -194,11 +208,12 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
 
   echo '        
   <div class="card card-body">
-    <form class="form-inline">
-      <div class="form-group col-9 mb-2">        
-        <input type="text" class="form-control" id="comment" placeholder="Comment...">
+    <form class="row" method="post">
+      <div class="form-group col-9 mb-2">
+        <input type="text" class="form-control" name="new_comment_content" placeholder="Comment...">
+        <input type="hidden" class="form-control" name="new_comment_post_id" value="' . $userPostId . '">
       </div>
-      <button type="submit" class="col-3 btn btn-outline-primary mb-2">Post</button>
+      <button type="submit" class="col-3 mb-2 btn btn-outline-primary">Post</button>
     </form>
   </div>
   ';
