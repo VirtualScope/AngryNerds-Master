@@ -7,6 +7,7 @@ include("includes/authenticate.php");
 
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
+
 // Include Header
 include("includes/header.php");
 
@@ -19,8 +20,6 @@ include("includes/db_config.php");
 // ============== Variables ==============
 
 ?>
-
-<html lang="en">
 
 <html lang="en">
 
@@ -98,18 +97,19 @@ include("includes/db_config.php");
                 echo '  
                 <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                  <img class="card-img-top" src="images/'.$courseImage.'" alt="'. $courseCode .'"  data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+                  <img class="card-img-top" src="images/'.$courseImage.'" alt="'. $courseCode .'" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                   <div class="card-body">
                     <p class="card-text"><b>'. $courseCode .'</b>: '.$courseDescription.'</p>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div class="btn-group">
-                      <button type="button" class="btn btn-outline-secondary">View Forum</button>
-                      </div>
+                      <form class="btn-group" action="comments.php" method="post">
+                        <input id="courseId" type="hidden" name="courseId" value="'. $courseId .'"/>
+                        <button type="submit" class="btn btn-outline-secondary">View Forum</button>
+                      </form>
                       <small class="text-muted">Jan 20 - May 20</small>
                     </div>
                   </div>
                 </div>
-              </div>       
+              </div>    
                 ';
               }
             }
@@ -117,9 +117,12 @@ include("includes/db_config.php");
 
           ?>
 
-          </div>
+
+
+
         </div>
       </div>
+    </div>
 
   </main>
 

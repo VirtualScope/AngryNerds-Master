@@ -2,6 +2,9 @@
 
 // ============== Includes ==============
 
+// Ensure the user is logged in.
+include("includes/authenticate.php");
+
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 include("includes/header.php");
@@ -9,15 +12,19 @@ include("includes/header.php");
 // Include bootstrap library.
 include("includes/bootstrap.php");
 
-// ============== DB setup ==============
-
-// DB config.
-DEFINE('DATABASE_HOST', 'localhost');
-DEFINE('DATABASE_DATABASE', 'angrynerdsmaster');
-DEFINE('DATABASE_USER', 'root');
-DEFINE('DATABASE_PASSWORD', '');
+// DB setup
+include("includes/db_config.php");
 
 // ============== Variables ==============
+
+$courseId = "";
+
+// ============== Operations ==============
+
+// Find out what course we need to load user posts for.
+if (isset($_POST)) {
+  if (isset($_POST['courseId'])) $courseId = $_POST['courseId'];
+}
 
 ?>
 
@@ -26,55 +33,50 @@ DEFINE('DATABASE_PASSWORD', '');
 
 <body>
 
-    <!-- Scrollable Region -->
-    <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6">
+  <!-- Scrollable Region -->
+  <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
 
-        <div class='container'>
+    <div class='container'>
 
-            <?php
+      <?php
 
-            // ============== Load posts from DB ==============
+      // ============== Load posts from DB ==============
 
-            // Connect to DB
-            $dbcn = new mysqli(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD, DATABASE_DATABASE);
-            $dbcn->set_charset("utf8");
-            if (mysqli_connect_errno()) {
-                echo "<p>Error creating database connection.</p>";
-                exit;
-            }
+      // Generate SQL
+      $sql = "SELECT * FROM user_post WHERE course_id=$courseId";
 
-            // Generate SQL
-            $sql = "SELECT * FROM user_post";
+      // Run query, retrieving unfiltered set of words.
+      $result = $dbcn->query($sql);
+      if (!$result) {
+        echo ("<p>Failed to load user posts :{</p>");
+        exit;
+      }
 
-            // Run query, retrieving unfiltered set of words.
-            $result = $dbcn->query($sql);
-            if (!$result) {
-                echo ("<p>Failed to load user posts :{</p>");
-                exit;
-            }
+      // How many rows were retrieved?
+      $numRows = $result->num_rows;
 
-            // How many rows were retrieved?
-            $numRows = $result->num_rows;
+      // If any were found...
+      if ($numRows > 0) {
+        // Loop over each row.
+        for ($i = 0; $i < $numRows; $i++) {
+          $row = $result->fetch_array();
+          $userPostId = $row['id'];
+          $title = $row['title'];
+          $content = $row['content'];
+          $created_date = $row['created_date'];
+          $user_id = $row['user_id'];
+          $image = $row['image'];
 
-            // If any were found...
-            if ($numRows > 0) {
-                // Loop over each row.
-                for ($i = 0; $i < $numRows; $i++) {
-                    $row = $result->fetch_array();
-                    $content = $row['content'];
-                    $title = $row['title'];
-                    $created_date = $row['created_date'];
-                    $created_by = $row['created_by'];
-                    $image = $row['image'];
-                    displayUserPost($content, $title, $created_date, $created_by, $image);
-                }
-            }
+          // Output.
+          displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $user_id, $image);
+        }
+      }
 
-            ?>
-
-        </div>
+      ?>
 
     </div>
+
+  </div>
 
 </body>
 
@@ -83,8 +85,28 @@ DEFINE('DATABASE_PASSWORD', '');
 <?php
 
 // Prints a user post on the screen using the information stored in the DB.
-function displayUserPost($content, $title, $created_date, $created_by, $image){
-    echo'
+function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $user_id, $image)
+{
+  // Load associated user
+  $query = "SELECT fname, lname FROM users WHERE id=$user_id";
+
+  // Run query.
+  $result = $dbcn->query($query);
+  if (!$result) {
+    echo ("<p>Failed to load user :{</p>");
+    exit;
+  }
+
+  // If any were found...
+  $fname = "Anonymous";
+  $lname = "User";
+  if ($result->num_rows > 0) {
+    $userRow = $result->fetch_array();
+    $fname = $userRow['fname'];
+    $lname = $userRow['lname'];
+  }
+
+  echo '
     
     <!-- User post card -->
     <div class="myCard card center">
@@ -93,15 +115,16 @@ function displayUserPost($content, $title, $created_date, $created_by, $image){
         <!-- Text Content -->
         <div class="col-sm-8">
           <div class="card-body">
-            <h5 class="card-title">'. $title .'</h5>
-            <p class="card-text">'. $content .'</p>
-            <p class="card-text"><small class="text-muted">'. $created_date .'</small></p>
+            <h5 class="card-title">' . $title . '</h5>
+            <p class="card-text"><i>' . $fname . ' ' . $lname . '</i></p><br>
+            <p class="card-text">' . $content . '</p>
+            <p class="card-text"><small class="text-muted">' . $created_date . '</small></p>
           </div>
         </div>
     
         <!-- Picture -->
         <div class="col-sm-4" style="margin: auto;">
-          <img src="images/ImageNotFound.png" class="card-img" alt="...">
+          <img src="images/' . $image . '" class="card-img" alt="...">
         </div>
       </div>
     
@@ -113,10 +136,82 @@ function displayUserPost($content, $title, $created_date, $created_by, $image){
       </p>
     
       <!-- Comment -->
-      <div class="collapse" id="commentSection">
-        <div class="card card-body">
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-        </div>
+      <div class="collapse" id="commentSection">';
+
+  // ================= START Comments Section =================
+
+  // Load associated comments
+  $query = "SELECT * FROM user_post_comment WHERE user_post_id=$userPostId";
+
+  // Run query.
+  $result = $dbcn->query($query);
+  if (!$result) {
+    echo ("<p>Failed to load comments on post ID " . $userPostId . " :{</p>");
+    exit;
+  }
+
+  // If any were found...
+  $commentsFound = $result->num_rows;
+  if ($commentsFound > 0) {
+
+    // Loop over the comments and print them.
+    $commentUserId = 0;
+    $commentContent = "";
+    $commentCreatedDate = "";
+    for ($i = 0; $i < $commentsFound; $i++) {
+      $commentRow = $result->fetch_array();
+      $commentUserId = $commentRow["user_id"];
+      $commentContent = $commentRow["content"];
+      $commentCreatedDate = $commentRow["created_date"];
+
+      // Load associated user
+      $query = "SELECT fname, lname FROM users WHERE id=$commentUserId";
+
+      // Run query.
+      $userResult = $dbcn->query($query);
+      if (!$userResult) {
+        echo ("<p>Failed to load user :{</p>");
+        exit;
+      }
+
+      // If any were found...
+      $commentUserFname = "Anonymous";
+      $commentUserLname = "User";
+      if ($userResult->num_rows > 0) {
+        $userRow = $userResult->fetch_array();
+        $commentUserFname = $userRow['fname'];
+        $commentUserLname = $userRow['lname'];
+      }
+
+      echo '        
+      <div class="card card-body">
+      <i>' . $commentUserFname . ' ' . $commentUserLname . ' - <small class="text-muted">' . $commentCreatedDate . '</small></i>
+      <p>' . $commentContent . '</p>      
+      </div>
+      ';
+    }
+  }
+
+  echo '        
+  <div class="card card-body">
+    <form class="form-inline">
+      <div class="form-group col-9 mb-2">        
+        <input type="text" class="form-control" id="comment" placeholder="Comment...">
+      </div>
+      <button type="submit" class="col-3 btn btn-outline-primary mb-2">Post</button>
+    </form>
+  </div>
+  ';
+
+?>
+
+
+
+<?php
+
+  // ================= END Comments Section =================
+
+  echo '
       </div>
     
     </div>
