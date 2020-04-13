@@ -111,8 +111,13 @@ function attemptLogin()
     // If our query was successful...
     $numRows = $result->num_rows;
     if ($numRows > 0) {
+        // Get the DB row.
+        $row = $result->fetch_assoc();
+        $userId = $row['id'];
+
         // Set session variables and reroute to the main page.
         $_SESSION['isLoggedIn'] = true;
+        $_SESSION['userId'] = $userId;
         header("Location: index.php");
     }
     // User input failed, but the query was succesful.
