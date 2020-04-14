@@ -36,8 +36,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
   }
 
   // Once the values have been used, clear them to ensure they don't get reposted
-  $_POST['new_comment_post_id'] = null;
-  $_POST['new_comment_content'] = null;
+
 }
 
 ?>
@@ -95,8 +94,8 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
   </div>
 
   <!-- Create post -->
-  <div class="text-center" style="margin-top:10px">
-    <form action="create_user_post.php">
+  <div class="text-center" style="margin-top:100px">
+    <form action="create_user_post.php">      
       <button type="submit" class="btn btn-primary">Create post</button>
     </form>
   </div>

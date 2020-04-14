@@ -2,6 +2,9 @@
 
 // ============== Includes ==============
 
+// Ensure the user is logged in.
+include("includes/authenticate.php");
+
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 
@@ -11,15 +14,40 @@ include("includes/header.php");
 // Include bootstrap library.
 include("includes/bootstrap.php");
 
-// ============== DB setup ==============
-
-// DB config.
-DEFINE('DATABASE_HOST', 'localhost');
-DEFINE('DATABASE_DATABASE', 'angrynerdsmaster');
-DEFINE('DATABASE_USER', 'root');
-DEFINE('DATABASE_PASSWORD', '');
+// DB setup
+include("includes/db_config.php");
 
 // ============== Variables ==============
+
+$courseId = $_SESSION['courseId'];
+
+// ============== Operations ==============
+
+if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['filename'])){
+    $sql = "INSERT INTO `user_post`(`title`, `content`, `user_id`, `course_id`, `image`) 
+    VALUES (    
+    '" . $_POST['postTitle'] . "',
+    '" . $_POST['postContent'] . "',
+    " . $_SESSION['userId'] . ", 
+    " . $_SESSION['courseId'] . ", 
+    '" . $_POST['filename'] . "'
+    )";    
+  
+    // Run query.
+    $result = $dbcn->query($sql);
+    if (!$result) {
+      echo ("<p>Failed to save post :{</p>");
+      exit;
+    }
+  
+    // Once the values have been used, clear them to ensure they don't get reposted
+    $_POST['postTitle'] = null;
+    $_POST['postContent'] = null;
+    $_POST['filename'] = null;
+
+    // Return to the forum page.
+    header("Location: comments.php");
+}
 
 ?>
 
@@ -52,11 +80,11 @@ DEFINE('DATABASE_PASSWORD', '');
 
         <!-- Input fields -->
         <div class="col-12 order-md-1">
-            <form class="needs-validation" novalidate="">
+            <form class="needs-validation" novalidate="" method="post">
                 <!-- Post Title -->
                 <div class="col-md-6 mb-3">
                     <label for="postTitle">Title</label>
-                    <input type="text" class="form-control" id="postTitle" placeholder="" value="" required="">
+                    <input type="text" class="form-control" id="postTitle" name="postTitle" placeholder="" value="" required="">
                     <div class="invalid-feedback">
                         Valid post title is required.
                     </div>
@@ -65,14 +93,15 @@ DEFINE('DATABASE_PASSWORD', '');
                 <div class="col-12">
                     <div class="form-group">
                         <label for="postContent">Content</label>
-                        <textarea class="form-control" rows="5" id="postContent" placeholder="" value="" required=""></textarea>
+                        <input type="textarea" class="form-control" rows="5" id="postContent" name="postContent" placeholder="" value="" required=""></input>
                         <div class="invalid-feedback">
                             Valid post content is required.
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <!-- This happens automatically -->
+                <!-- <div class="col-md-6">
                     <label>Associated class</label><br>
                     <select class="custom-select d-block w-100" id="class" required="">
                         <option value="">Choose...</option>
@@ -83,10 +112,9 @@ DEFINE('DATABASE_PASSWORD', '');
                     <div class="invalid-feedback">
                         Valid associated class is required.
                     </div>
-                </div>
+                </div> -->
 
-                <!-- Image -->
-                <br>
+                <!-- Image -->                
                 <div class="col-md-6 mb-3">
                     <label>Image</label>
                     <div class="custom-file mb-3">
@@ -100,8 +128,8 @@ DEFINE('DATABASE_PASSWORD', '');
 
                 <!-- Submit button -->
                 <hr class="mb-4">
-                <div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Post!</button>
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg" type="submit">Post!</button>
                 </div>
             </form>
         </div>
