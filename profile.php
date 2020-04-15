@@ -6,7 +6,7 @@
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 
 // Allow anyone to view the login page.
-$secured = false;
+$secured = true;
 
 // Include Header
 include("includes/header.php");
@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    attemptLogin($database);
+    updateProfile($database);
 }
 
 ?>
@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Signin Template for Bootstrap</title>
+    <title>Profile</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
@@ -56,20 +56,20 @@ if (isset($_POST['submit'])) {
 
 <body class="text-center">
     <div class="container" style="max-width:500px;">
-        <form class="form-signin" method="post">
+        <form class="form-profile" method="post">
             <br>
             <!-- Image -->
             <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Change Email Address</h1>
             <!-- Email -->
-            <label for="inputEmail" class="sr-only">Email address</label>
+            <label for="inputEmail" class="sr-only">New Email address</label>
             <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Submit -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Update</button>
             <p class="mt-5 mb-3 text-muted">© 2020</p>
         </form>
     </div>
@@ -86,46 +86,20 @@ include("includes/footer.php");
 <?php
 
 // Attempt to log in the user
-function attemptLogin($database)
+function updateProfile($database)
 {
     // Define variables.
     $inputEmail = "";
     $inputPassword = "";
+    $userId = $_SESSION['userId'];
 
     // Collect input from the user.
     if (isset($_POST['inputEmail'])) $inputEmail = trim($_POST['inputEmail']);
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
 
     // Query the DB for that user.    
-    $sqlQuery = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
+    $sqlQuery = "UPDATE users SET email='$inputEmail' WHERE id='$userId' AND pass='$inputPassword' ";
     $result = $database->query($sqlQuery);
-    if (!$result) {
-        header("Location: login_form.php");
-    }
-
-    // If our query was successful...
-    $numRows = $result->num_rows;
-    if ($numRows > 0) {
-        // Get the DB row.
-        session_regenerate_id();
-        $row = $result->fetch_assoc();
-        $userId = $row['id'];
-        $fname = $row['fname'];
-        $lname = $row['lname'];
-        $email = $row['email'];
-
-        // Set session variables and reroute to the main page.
-        $_SESSION['isLoggedIn'] = true;
-        $_SESSION['userId'] = $userId;
-        $_SESSION['fname'] = $fname;
-        $_SESSION['lname'] = $lname;
-        $_SESSION['email'] = $email;
-
-        header("Location: index.php");
-    }
-    // User input failed, but the query was succesful.
-    else
-        $errorMessage = "User name or password is incorrect";
 }
 
 ?>

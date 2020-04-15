@@ -39,7 +39,7 @@ $homepath = 'http://'.$_SERVER['SERVER_NAME'].'/';
             echo'
             <ul class="navbar-nav ml-auto">
               <li class="nav-text"><i class="fas fa-user"></i>
-              '. $displayName .'
+              <a href="profile.php" >'. $displayName .'</a>
               </li>';
               /*if($userType == "admin"){
                 echo'
