@@ -3,7 +3,7 @@
 // ============== Includes ==============
 
 // Ensure the user is logged in.
-include("includes/authenticate.php");
+$secured = true;
 
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';

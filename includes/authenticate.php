@@ -6,7 +6,6 @@ if (!isset($_SESSION)) {
 }
 
 // Assume all pages require login.
-$secured = true;
 $isLoggedIn = isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 'true';
 if ($secured && $isLoggedIn == false) {
     // Call the function validate_credentials($secured).
@@ -22,5 +21,11 @@ function validate_credentials($secured)
 
             exit;
         }
+    }
+    else // Not ideal but if the user visits the only non-secured page which is the login currently, they shall be redirected.
+    {
+        header("Location: index.php");
+
+        exit;
     }
 }

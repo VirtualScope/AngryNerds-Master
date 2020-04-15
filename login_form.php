@@ -5,6 +5,9 @@
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
 
+// Allow anyone to view the login page.
+$secured = false;
+
 // Include Header
 include("includes/header.php");
 
@@ -104,12 +107,18 @@ function attemptLogin($database)
     $numRows = $result->num_rows;
     if ($numRows > 0) {
         // Get the DB row.
+        session_regenerate_id();
         $row = $result->fetch_assoc();
         $userId = $row['id'];
+        $fname = $row['fname'];
+        $lname = $row['lname'];
 
         // Set session variables and reroute to the main page.
         $_SESSION['isLoggedIn'] = true;
         $_SESSION['userId'] = $userId;
+        $_SESSION['fname'] = $fname;
+        $_SESSION['lname'] = $lname;
+
         header("Location: index.php");
     }
     // User input failed, but the query was succesful.

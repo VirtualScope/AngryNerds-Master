@@ -4,6 +4,10 @@
 
 // Include CSS.
 echo '<link rel="stylesheet" type="text/css" href="css/styles.css"></script>';
+
+// Secure the web page
+$secured = true;
+
 include("includes/header.php");
 
 // Include bootstrap library.
