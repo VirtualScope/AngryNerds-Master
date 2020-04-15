@@ -62,7 +62,7 @@ include("includes/db_config.php");
 
           // Query the DB for classes associated with that user.    
           $sqlQuery = "SELECT course_id FROM user_course WHERE user_id=$userId";
-          $result = $dbcn->query($sqlQuery);
+          $result = $database->query($sqlQuery);
           if (!$result) {
             echo "There was an error loading your classes :{";
           }
@@ -79,7 +79,7 @@ include("includes/db_config.php");
 
               // Query the DB for that course...
               $sqlQuery = "SELECT * FROM courses WHERE id=$courseId";
-              $courseResult = $dbcn->query($sqlQuery);
+              $courseResult = $database->query($sqlQuery);
               if (!$courseResult) {
                 echo "There was an error loading your class with ID " . $courseId . " :{";
               }

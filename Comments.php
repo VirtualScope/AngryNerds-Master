@@ -29,7 +29,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
   VALUES (" . $_SESSION['userId'] . ", " . ($_POST['new_comment_post_id']) . ", '" . ($_POST['new_comment_content']) . "')";
 
   // Run query.
-  $result = $dbcn->query($sql);
+  $result = $database->query($sql);
   if (!$result) {
     echo ("<p>Failed to save comment :{</p>");
     exit;
@@ -59,7 +59,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
       $sql = "SELECT * FROM user_post WHERE course_id=" . $_SESSION['courseId']  . " ORDER BY created_date DESC";
 
       // Run query.
-      $result = $dbcn->query($sql);
+      $result = $database->query($sql);
       if (!$result) {
         echo ("<p>Failed to load user posts :{</p>");
         exit;
@@ -81,7 +81,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
           $image = $row['image'];
 
           // Output.
-          displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $user_id, $image);
+          displayUserPost($database, $userPostId, $title, $content, $created_date, $user_id, $image);
         }
       } else {
         echo "No posts yet :(";
@@ -107,13 +107,13 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 <?php
 
 // Prints a user post on the screen using the information stored in the DB.
-function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $user_id, $image)
+function displayUserPost($database, $userPostId, $title, $content, $created_date, $user_id, $image)
 {
   // Load associated user
   $query = "SELECT fname, lname FROM users WHERE id=$user_id";
 
   // Run query.
-  $result = $dbcn->query($query);
+  $result = $database->query($query);
   if (!$result) {
     echo ("<p>Failed to load user :{</p>");
     exit;
@@ -166,7 +166,7 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
   $query = "SELECT * FROM user_post_comment WHERE user_post_id=$userPostId";
 
   // Run query.
-  $result = $dbcn->query($query);
+  $result = $database->query($query);
   if (!$result) {
     echo ("<p>Failed to load comments on post ID " . $userPostId . " :{</p>");
     exit;
@@ -190,7 +190,7 @@ function displayUserPost($dbcn, $userPostId, $title, $content, $created_date, $u
       $query = "SELECT fname, lname FROM users WHERE id=$commentUserId";
 
       // Run query.
-      $userResult = $dbcn->query($query);
+      $userResult = $database->query($query);
       if (!$userResult) {
         echo ("<p>Failed to load user :{</p>");
         exit;

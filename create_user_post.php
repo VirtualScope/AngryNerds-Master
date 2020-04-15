@@ -34,7 +34,7 @@ if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['f
     )";    
   
     // Run query.
-    $result = $dbcn->query($sql);
+    $result = $database->query($sql);
     if (!$result) {
       echo ("<p>Failed to save post :{</p>");
       exit;

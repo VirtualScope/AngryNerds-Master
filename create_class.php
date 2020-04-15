@@ -11,11 +11,8 @@ include("includes/bootstrap.php");
 
 // ============== DB setup ==============
 
-// DB config.
-DEFINE('DATABASE_HOST', 'localhost');
-DEFINE('DATABASE_DATABASE', 'angrynerdsmaster');
-DEFINE('DATABASE_USER', 'root');
-DEFINE('DATABASE_PASSWORD', '');
+// DB setup.
+include("includes/db_config.php");
 
 // ============== Variables ==============
 
