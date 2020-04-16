@@ -24,12 +24,10 @@ if (isset($_POST['courseId'])) $_SESSION['courseId'] = $_POST['courseId'];
 
 // Insert new comment entry.
 if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id']) && $_POST['new_comment_content'] != "") {
-
-  $sql = "INSERT INTO `user_post_comment`(`user_id`, `user_post_id`, `content`) 
-  VALUES (" . $_SESSION['userId'] . ", " . ($_POST['new_comment_post_id']) . ", '" . ($_POST['new_comment_content']) . "')";
-
-  // Run query.
-  $result = $database->query($sql);
+$userId_ = $_SESSION['userId'];
+$newCommentPostId = $_POST['new_comment_post_id'];
+$newCommentContent = $_POST['new_comment_content'];
+  $result = $Database->add_comment($userId_, $newCommentPostId, $newCommentContent);
   if (!$result) {
     echo ("<p>Failed to save comment :{</p>");
     exit;
@@ -55,11 +53,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 
       // ============== Load posts from DB ==============
 
-      // Generate SQL
-      $sql = "SELECT * FROM user_post WHERE course_id=" . $_SESSION['courseId']  . " ORDER BY created_date DESC";
-
-      // Run query.
-      $result = $database->query($sql);
+      $result = $Database->get_user_posts($_SESSION['courseId']);
       if (!$result) {
         echo ("<p>Failed to load user posts :{</p>");
         exit;
@@ -81,7 +75,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
           $image = $row['image'];
 
           // Output.
-          displayUserPost($database, $userPostId, $title, $content, $created_date, $user_id, $image);
+          displayUserPost($Database, $userPostId, $title, $content, $created_date, $user_id, $image);
         }
       } else {
         echo "No posts yet :(";
@@ -107,13 +101,10 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 <?php
 
 // Prints a user post on the screen using the information stored in the DB.
-function displayUserPost($database, $userPostId, $title, $content, $created_date, $user_id, $image)
+function displayUserPost($Database, $userPostId, $title, $content, $created_date, $user_id, $image)
 {
   // Load associated user
-  $query = "SELECT fname, lname FROM users WHERE id=$user_id";
-
-  // Run query.
-  $result = $database->query($query);
+  $result = $Database->get_names_from_user_id($user_id);
   if (!$result) {
     echo ("<p>Failed to load user :{</p>");
     exit;
@@ -163,10 +154,9 @@ function displayUserPost($database, $userPostId, $title, $content, $created_date
   // ================= START Comments Section =================
 
   // Load associated comments
-  $query = "SELECT * FROM user_post_comment WHERE user_post_id=$userPostId";
 
   // Run query.
-  $result = $database->query($query);
+  $result = $Database->load_comments($userPostId);
   if (!$result) {
     echo ("<p>Failed to load comments on post ID " . $userPostId . " :{</p>");
     exit;
@@ -187,10 +177,8 @@ function displayUserPost($database, $userPostId, $title, $content, $created_date
       $commentCreatedDate = $commentRow["created_date"];
 
       // Load associated user
-      $query = "SELECT fname, lname FROM users WHERE id=$commentUserId";
 
-      // Run query.
-      $userResult = $database->query($query);
+      $userResult = $Database->get_names_from_user_id($commentUserId);
       if (!$userResult) {
         echo ("<p>Failed to load user :{</p>");
         exit;

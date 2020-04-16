@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    updateProfile($database);
+    updateProfile($Database);
 }
 
 ?>
@@ -86,7 +86,7 @@ include("includes/footer.php");
 <?php
 
 // Attempt to log in the user
-function updateProfile($database)
+function updateProfile($Database)
 {
     // Define variables.
     $inputEmail = "";
@@ -98,8 +98,7 @@ function updateProfile($database)
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
 
     // Query the DB for that user.    
-    $sqlQuery = "UPDATE users SET email='$inputEmail' WHERE id='$userId' AND pass='$inputPassword' ";
-    $result = $database->query($sqlQuery);
+    $result = $Database->update_email($inputEmail, $userId, $inputPassword);
 }
 
 ?>

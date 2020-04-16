@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    attemptLogin($database);
+    attemptLogin($Database);
 }
 
 ?>
@@ -86,7 +86,7 @@ include("includes/footer.php");
 <?php
 
 // Attempt to log in the user
-function attemptLogin($database)
+function attemptLogin($Database)
 {
     // Define variables.
     $inputEmail = "";
@@ -97,8 +97,7 @@ function attemptLogin($database)
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
 
     // Query the DB for that user.    
-    $sqlQuery = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
-    $result = $database->query($sqlQuery);
+    $result = $Database->check_credentials($inputEmail, $inputPassword);
     if (!$result) {
         header("Location: login_form.php");
     }

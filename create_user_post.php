@@ -24,17 +24,8 @@ $courseId = $_SESSION['courseId'];
 // ============== Operations ==============
 
 if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['filename'])){
-    $sql = "INSERT INTO `user_post`(`title`, `content`, `user_id`, `course_id`, `image`) 
-    VALUES (    
-    '" . $_POST['postTitle'] . "',
-    '" . $_POST['postContent'] . "',
-    " . $_SESSION['userId'] . ", 
-    " . $_SESSION['courseId'] . ", 
-    '" . $_POST['filename'] . "'
-    )";    
-  
-    // Run query.
-    $result = $database->query($sql);
+    // TODO: Change courseID from a SESSION variable to a variable that is sent by the page.
+    $result = $Database->add_post($_POST['postTitle'], $_POST['postContent'], $_SESSION['userId'], $_SESSION['courseId'], $_POST['filename']);
     if (!$result) {
       echo ("<p>Failed to save post :{</p>");
       exit;
