@@ -7,7 +7,7 @@ if (isset($_SESSION['fname']))
 else
   $displayName = "Anonymous";
 
-$homepath = 'http://'.$_SERVER['SERVER_NAME'].'/';
+$homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
 
 ?>
 

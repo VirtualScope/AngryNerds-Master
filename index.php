@@ -63,7 +63,7 @@ include("includes/db_config.php");
           // Query the DB for classes associated with that user.    
           $result = $Database->get_classes($userId);
           if (!$result) {
-            echo "There was an error loading your classes :{";
+            echo "There was an error connecting to the database :{";
           }
 
           // If our query was successful...
@@ -95,12 +95,12 @@ include("includes/db_config.php");
                 echo '  
                 <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                  <img class="card-img-top" src="images/'.$courseImage.'" alt="'. $courseCode .'" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
+                  <img class="card-img-top" src="images/' . $courseImage . '" alt="' . $courseCode . '" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                   <div class="card-body">
-                    <p class="card-text"><b>'. $courseCode .'</b>: '.$courseDescription.'</p>
+                    <p class="card-text"><b>' . $courseCode . '</b>: ' . $courseDescription . '</p>
                     <div class="d-flex justify-content-between align-items-center">
                       <form class="btn-group" action="comments.php" method="post">
-                        <input id="courseId" type="hidden" name="courseId" value="'. $courseId .'"/>
+                        <input id="courseId" type="hidden" name="courseId" value="' . $courseId . '"/>
                         <button type="submit" class="btn btn-outline-secondary">View Forum</button>
                       </form>
                       <small class="text-muted">Jan 20 - May 20</small>
@@ -122,6 +122,39 @@ include("includes/db_config.php");
       </div>
     </div>
 
+    <?php
+
+    // Load create class button only if an admin user is logged in.
+    $userId = $_SESSION['userId'];
+
+    // Query the DB for classes associated with that user.    
+    $result = $Database->get_user($userId);
+    if (!$result) {
+      echo "There was an error connecting to the database :{";
+    }
+
+    // If our query was successful...
+    $numRows = $result->num_rows;
+    if ($numRows > 0) {
+      // Get the DB row.
+      $row = $result->fetch_assoc();
+      $isAdmin = $row['admin'];
+    }
+
+    // If the user is an admin, show the button.
+    if ($isAdmin){      
+
+      // Create Class
+      echo'
+      <div class="text-center" style="margin-top:100px">
+      <form action="create_class.php">
+        <button type="submit" class="btn btn-primary">Create class</button>
+      </form>
+      </div>
+      ';
+    }
+
+    ?>
   </main>
 
 

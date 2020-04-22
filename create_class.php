@@ -30,7 +30,7 @@ include("includes/db_config.php");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Checkout example for Bootstrap</title>
+    <title>Create Class</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/checkout/">
 

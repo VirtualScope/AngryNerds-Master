@@ -50,7 +50,7 @@ if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['f
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Checkout example for Bootstrap</title>
+    <title>Create Post</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/checkout/">
 

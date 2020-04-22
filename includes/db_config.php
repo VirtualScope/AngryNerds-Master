@@ -1,6 +1,6 @@
 <?php
 
-include("db_access_layer.php");
+require ("db_access_layer.php");
 $Database;
 // Create database connection object
 try{                                    #  Host     Username Password     Database Name 

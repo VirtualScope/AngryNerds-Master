@@ -45,6 +45,11 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
         return $this->query($sql);
     }
+    function get_user($userId)
+    {
+        $sql = "SELECT * FROM users WHERE id=$userId";
+        return $this->query($sql);
+    }
     function get_classes($userId)
     {        
         $sql = "SELECT course_id FROM user_course WHERE user_id=$userId";        
