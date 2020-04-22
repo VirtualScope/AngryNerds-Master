@@ -35,6 +35,25 @@ class DatabaseAccessLayer
         )";
         return $this->query($sql);
     }
+    function add_class($classCode, $classDescription, $imageFileName)
+    {
+        $sql = "INSERT INTO `courses`(`code`, `description`, `image`) 
+        VALUES (    
+        '" . $classCode . "',
+        '" . $classDescription . "',
+        '" . $imageFileName . "'
+        )";
+        return $this->query($sql);
+    }
+    function add_class_user($classCode, $userId)
+    {
+        $sql = "INSERT INTO `user_course`(`course_id`, `user_id`) 
+        VALUES (    
+        '" . $classCode . "',
+        '" . $userId . "'        
+        )";
+        return $this->query($sql);
+    }
     function update_email($newEmail, $userId, $currentPassword)
     {
         $sql = "UPDATE users SET email='$newEmail' WHERE id='$userId' AND pass='$currentPassword' ";
@@ -45,9 +64,13 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
         return $this->query($sql);
     }
-    function get_user($userId)
+    function get_users()
     {
-        $sql = "SELECT * FROM users WHERE id=$userId";
+        $sql = "SELECT * FROM users";
+        return $this->query($sql);
+    }
+    function get_class($classCode){
+        $sql = "SELECT * FROM courses WHERE code = '$classCode'";
         return $this->query($sql);
     }
     function get_classes($userId)

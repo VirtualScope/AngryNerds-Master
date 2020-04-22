@@ -91,20 +91,6 @@ if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['f
                     </div>
                 </div>
 
-                <!-- This happens automatically -->
-                <!-- <div class="col-md-6">
-                    <label>Associated class</label><br>
-                    <select class="custom-select d-block w-100" id="class" required="">
-                        <option value="">Choose...</option>
-                        <option>ICS 325-A</option>
-                        <option>ICS 325-B</option>
-                        <option>ICS 325-C</option>
-                    </select>
-                    <div class="invalid-feedback">
-                        Valid associated class is required.
-                    </div>
-                </div> -->
-
                 <!-- Image -->                
                 <div class="col-md-6 mb-3">
                     <label>Image</label>

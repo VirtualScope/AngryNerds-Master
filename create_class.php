@@ -20,6 +20,89 @@ include("includes/db_config.php");
 
 // ============== Variables ==============
 
+$classCode = null;
+$classDescription = null;
+$fileName = null;
+$userAssoc = null;
+
+if (isset($_POST['ClassCode'])) $classCode = $_POST['ClassCode'];
+if (isset($_POST['ClassDescription'])) $classDescription = $_POST['ClassDescription'];
+if (isset($_POST['filename'])) $fileName = $_POST['filename'];
+if (isset($_POST['users'])) $userAssoc = $_POST['users'];
+
+// ============== Operations ==============
+
+if (isset($classCode) && isset($classDescription) && isset($fileName) && isset($userAssoc)) {
+
+    // Ensure there are no duplicate courses.
+    $result = $Database->get_class($classCode);    
+    if (!$result) {
+        echo "There was an error saving the class :(";
+        exit;
+    }
+
+    // If the query succeeded, stop the saving process.
+    if ($result->num_rows > 0){
+        echo ("<div class='text-center'><h3>A class with that code already exists! There can be no duplicates.</h3></div>");
+        exit;
+    }
+
+    // Save the course.
+    $result = $Database->add_class(
+        $classCode,
+        $classDescription,
+        $fileName
+    );
+
+    // If the query failed...
+    if (!$result) {
+        echo ("<p>Failed to save class :{</p>");
+        exit;
+    }
+    // If the query was successful...
+    else {
+        // Give all users in the system access to this course.
+        if ($userAssoc == "All") {
+            $result = $Database->get_users();
+            if (!$result) {
+                echo "There was an error connecting to the database :{";
+            }
+
+            // If our query was successful...
+            $numRows = $result->num_rows;
+            if ($numRows > 0) {
+
+                // Get the appropriate class id
+                $result3 = $Database->get_class($classCode);    
+                if (!$result3) {
+                    echo "There was an error saving the class :(";
+                    exit;
+                }
+
+                // If the class is found, use its id.
+                if ($result3->num_rows != 0){
+                    // Get the class id.
+                    $row = $result3->fetch_assoc();
+                    $classId = $row['id'];
+                }
+
+                // For each user...
+                for ($i = 0; $i < $numRows; $i++) {
+                    // Get the user's id.
+                    $row = $result->fetch_assoc();
+                    $userId = $row['id'];
+
+                    // Create a row in user_course.
+                    $Database->add_class_user($classId, $userId);
+                }
+            }
+        }
+    }
+
+    // Return to the home page.
+    header("Location: index.php");
+}
+
 ?>
 
 <html lang="en">
@@ -51,25 +134,37 @@ include("includes/db_config.php");
 
         <!-- Input fields -->
         <div class="col-12 order-md-1">
-            <form class="needs-validation" novalidate="">
-                <!-- Class Name -->
+            <form class="needs-validation" novalidate="" method="post">
+                <!-- Class Code -->
                 <div class="col-md-6 mb-3">
-                    <label for="ClassName">Name</label>
-                    <input type="text" class="form-control" id="ClassName" placeholder="" value="" required="">
+                    <label for="ClassCode">Class Code</label>
+                    <input type="text" class="form-control" id="ClassCode" name="ClassCode" placeholder="ICS-325-A" value="" required="">
                     <div class="invalid-feedback">
-                        Valid class name is required.
+                        Valid class course code is required.
                     </div>
                 </div>
-                <!-- Class Content -->
+                <!-- Class Description -->
                 <div class="col-12">
                     <div class="form-group">
                         <label for="ClassDescription">Description</label>
-                        <textarea class="form-control" rows="5" id="ClassDescription" placeholder="" value="" required=""></textarea>
+                        <input type="textarea" class="form-control" rows="5" id="ClassDescription" name="ClassDescription" placeholder="" value="" required=""></input>
                         <div class="invalid-feedback">
                             Valid class description is required.
                         </div>
                     </div>
                 </div>
+
+                <!-- User -->
+                <div class="col-md-6">
+                    <label>Assign users</label><br>
+                    <select class="custom-select d-block w-100" id="class" name="users" required="">
+                        <option value="">Choose...</option>
+                        <option>All</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Valid associated users choice is required.
+                    </div>
+                </div><br>
 
                 <!-- Image -->
                 <div class="col-md-6 mb-3">
@@ -85,8 +180,8 @@ include("includes/db_config.php");
 
                 <!-- Submit button -->
                 <hr class="mb-4">
-                <div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Create!</button>
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg" type="submit">Create!</button>
                 </div>
             </form>
         </div>
