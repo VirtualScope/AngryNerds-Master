@@ -27,24 +27,39 @@ $userAssoc = null;
 
 if (isset($_POST['ClassCode'])) $classCode = $_POST['ClassCode'];
 if (isset($_POST['ClassDescription'])) $classDescription = $_POST['ClassDescription'];
-if (isset($_POST['filename'])) $fileName = $_POST['filename'];
 if (isset($_POST['users'])) $userAssoc = $_POST['users'];
 
 // ============== Operations ==============
 
-if (isset($classCode) && isset($classDescription) && isset($fileName) && isset($userAssoc)) {
+if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
 
     // Ensure there are no duplicate courses.
-    $result = $Database->get_class($classCode);    
+    $result = $Database->get_class($classCode);
     if (!$result) {
         echo "There was an error saving the class :(";
         exit;
     }
 
     // If the query succeeded, stop the saving process.
-    if ($result->num_rows > 0){
+    if ($result->num_rows > 0) {
         echo ("<div class='text-center'><h3>A class with that code already exists! There can be no duplicates.</h3></div>");
         exit;
+    }
+
+    // Image processing.
+    $fileName = basename($_FILES["fileToUpload"]["name"]);
+    $target_file = "images/" . $fileName;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    // Allow only certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        echo "<div class='text-center'>Invalid file format.</div>";
+        exit;
+    }
+
+    // Try to upload the file.
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
     }
 
     // Save the course.
@@ -73,14 +88,14 @@ if (isset($classCode) && isset($classDescription) && isset($fileName) && isset($
             if ($numRows > 0) {
 
                 // Get the appropriate class id
-                $result3 = $Database->get_class($classCode);    
+                $result3 = $Database->get_class($classCode);
                 if (!$result3) {
                     echo "There was an error saving the class :(";
                     exit;
                 }
 
                 // If the class is found, use its id.
-                if ($result3->num_rows != 0){
+                if ($result3->num_rows != 0) {
                     // Get the class id.
                     $row = $result3->fetch_assoc();
                     $classId = $row['id'];
@@ -134,7 +149,7 @@ if (isset($classCode) && isset($classDescription) && isset($fileName) && isset($
 
         <!-- Input fields -->
         <div class="col-12 order-md-1">
-            <form class="needs-validation" novalidate="" method="post">
+            <form class="needs-validation" novalidate="" method="post" enctype="multipart/form-data">
                 <!-- Class Code -->
                 <div class="col-md-6 mb-3">
                     <label for="ClassCode">Class Code</label>
@@ -170,13 +185,22 @@ if (isset($classCode) && isset($classDescription) && isset($fileName) && isset($
                 <div class="col-md-6 mb-3">
                     <label>Image</label>
                     <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input" id="customFile" name="filename" required="true">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
+                        <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload" required="true">
+                        <label class="custom-file-label" for="customFile">Choose...</label>
                         <div class="invalid-feedback">
-                            Valid class image is required.
+                            Image is required.
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    $('#fileToUpload').on('change', function() {
+                        //get the file name
+                        var fileName = $(this).val();
+                        //replace the "Choose a file" label
+                        $(this).next('.custom-file-label').html(fileName);
+                    })
+                </script>
 
                 <!-- Submit button -->
                 <hr class="mb-4">

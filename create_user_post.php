@@ -23,18 +23,30 @@ $courseId = $_SESSION['courseId'];
 
 // ============== Operations ==============
 
-if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['filename'])){
-    // TODO: Change courseID from a SESSION variable to a variable that is sent by the page.
-    $result = $Database->add_post($_POST['postTitle'], $_POST['postContent'], $_SESSION['userId'], $_SESSION['courseId'], $_POST['filename']);
-    if (!$result) {
-      echo ("<p>Failed to save post :{</p>");
-      exit;
+if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
+
+    // Image processing.
+    $fileName = basename($_FILES["fileToUpload"]["name"]);
+    $target_file = "images/" . $fileName;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    // Allow only certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        echo "<div class='text-center'>Invalid file format.</div>";
+        exit;
     }
-  
-    // Once the values have been used, clear them to ensure they don't get reposted
-    $_POST['postTitle'] = null;
-    $_POST['postContent'] = null;
-    $_POST['filename'] = null;
+
+    // Try to upload the file.
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
+    }
+
+    // TODO: Change courseID from a SESSION variable to a variable that is sent by the page.
+    $result = $Database->add_post($_POST['postTitle'], $_POST['postContent'], $_SESSION['userId'], $_SESSION['courseId'], $fileName);
+    if (!$result) {
+        echo ("<p>Failed to save post :{</p>");
+        exit;
+    }
 
     // Return to the forum page.
     header("Location: comments.php");
@@ -71,7 +83,7 @@ if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['f
 
         <!-- Input fields -->
         <div class="col-12 order-md-1">
-            <form class="needs-validation" novalidate="" method="post">
+            <form class="needs-validation" novalidate="" method="post" enctype="multipart/form-data">
                 <!-- Post Title -->
                 <div class="col-md-6 mb-3">
                     <label for="postTitle">Title</label>
@@ -91,17 +103,26 @@ if(isset($_POST['postTitle']) && isset($_POST['postContent']) && isset($_POST['f
                     </div>
                 </div>
 
-                <!-- Image -->                
+                <!-- Image -->
                 <div class="col-md-6 mb-3">
                     <label>Image</label>
                     <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input" id="customFile" name="filename" required="true">
-                        <label class="custom-file-label" for="customFile">Choose file</label>
+                        <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload" required="true">
+                        <label class="custom-file-label" for="customFile">Choose...</label>
                         <div class="invalid-feedback">
                             Valid post image is required.
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    $('#fileToUpload').on('change', function() {
+                        //get the file name
+                        var fileName = $(this).val();
+                        //replace the "Choose a file" label
+                        $(this).next('.custom-file-label').html(fileName);
+                    })
+                </script>
 
                 <!-- Submit button -->
                 <hr class="mb-4">
