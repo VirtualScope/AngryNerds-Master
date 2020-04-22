@@ -112,6 +112,7 @@ function attemptLogin($Database)
         $fname = $row['fname'];
         $lname = $row['lname'];
         $email = $row['email'];
+        $isAdmin = $row['admin'];
 
         // Set session variables and reroute to the main page.
         $_SESSION['isLoggedIn'] = true;
@@ -119,6 +120,7 @@ function attemptLogin($Database)
         $_SESSION['fname'] = $fname;
         $_SESSION['lname'] = $lname;
         $_SESSION['email'] = $email;
+        $_SESSION['isAdmin'] = $isAdmin;
 
         header("Location: index.php");
     }

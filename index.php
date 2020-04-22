@@ -123,26 +123,9 @@ include("includes/db_config.php");
     </div>
 
     <?php
-
-    // Load create class button only if an admin user is logged in.
-    $userId = $_SESSION['userId'];
-
-    // Query the DB for classes associated with that user.    
-    $result = $Database->get_user($userId);
-    if (!$result) {
-      echo "There was an error connecting to the database :{";
-    }
-
-    // If our query was successful...
-    $numRows = $result->num_rows;
-    if ($numRows > 0) {
-      // Get the DB row.
-      $row = $result->fetch_assoc();
-      $isAdmin = $row['admin'];
-    }
-
+    
     // If the user is an admin, show the button.
-    if ($isAdmin){      
+    if ($_SESSION['isAdmin']){      
 
       // Create Class
       echo'
