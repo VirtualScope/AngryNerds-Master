@@ -111,6 +111,7 @@ function signUp($Database)
     $inputPassword = "";
     $aboutMe = "";
     $isAdmin = 0;
+    $results = [];
 
     // Collect input from the user.
     if (isset($_POST['inputFirstName'])) $inputFirstName = trim($_POST['inputFirstName']);
@@ -119,7 +120,17 @@ function signUp($Database)
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
     if (isset($_POST['aboutMe'])) $aboutMe = trim($_POST['aboutMe']);
 
-    // TODO: Input Regex Checking goes here.
+    // Input Regex Checking goes here.
+    array_push($results, boolval(preg_match("/[A-Z][A-z]+/", $inputFirstName)));
+    array_push($results, boolval(preg_match("/[A-Z][A-z]+/", $inputLastName)));
+    array_push($results, boolval(filter_var($inputEmail, FILTER_VALIDATE_EMAIL)));
+    array_push($results, boolval(preg_match("/(\w|\d|[@#\$%\^&]){8,99}/", $inputPassword)));
+    array_push($results, boolval(preg_match("/(\s|\w|\d|[@#\$%\^&]){0,999}/", $aboutMe)));
+
+    if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
+    {
+        return "Invalid input in one or more fields!"; # Client side gives instant feedback, this is to stop bad clients.
+    }
 
     // Query the DB for that user.    
     $result = $Database->count_users_by_identity($inputEmail);
@@ -131,7 +142,7 @@ function signUp($Database)
     }
     else
     {
-        return $errorMessage = "User already exists";
+        return "User already exists";
     }
 }
 

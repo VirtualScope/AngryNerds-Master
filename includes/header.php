@@ -1,5 +1,5 @@
 <?php
-include("includes/authenticate.php"); # This creates a session.bg-cover
+require("authenticate.php"); # This creates a session.bg-cover
 
 $displayName;
 if (isset($_SESSION['fname']))

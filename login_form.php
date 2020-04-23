@@ -98,6 +98,16 @@ function attemptLogin($Database)
     if (isset($_POST['inputEmail'])) $inputEmail = trim($_POST['inputEmail']);
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
 
+   // Input Regex Checking goes here.
+   array_push($results, boolval(filter_var($inputEmail, FILTER_VALIDATE_EMAIL)));
+   array_push($results, boolval(preg_match("/(\w|\d|[@#\$%\^&]){8,99}/", $inputPassword)));
+
+   if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
+   {
+       return "Invalid input in one or more fields!"; # Client side gives instant feedback, this is to stop bad clients.
+   }
+
+
     // Query the DB for that user.    
     $result = $Database->check_credentials($inputEmail, $inputPassword);
     if (!$result) {
