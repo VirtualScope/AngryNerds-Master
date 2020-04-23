@@ -4,8 +4,7 @@ html, body {
 
 .myRegion{
     height: 1000px;    
-    padding-top: 15px;
-    border-color: rgb(210, 210, 210);   
+    padding-top: 15px;    
     margin-top: 25px; 
 }
 

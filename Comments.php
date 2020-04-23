@@ -24,9 +24,9 @@ if (isset($_POST['courseId'])) $_SESSION['courseId'] = $_POST['courseId'];
 
 // Insert new comment entry.
 if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id']) && $_POST['new_comment_content'] != "") {
-$userId_ = $_SESSION['userId'];
-$newCommentPostId = $_POST['new_comment_post_id'];
-$newCommentContent = $_POST['new_comment_content'];
+  $userId_ = $_SESSION['userId'];
+  $newCommentPostId = $_POST['new_comment_post_id'];
+  $newCommentContent = $_POST['new_comment_content'];
   $result = $Database->add_comment($userId_, $newCommentPostId, $newCommentContent);
   if (!$result) {
     echo ("<p>Failed to save comment :{</p>");
@@ -45,7 +45,7 @@ $newCommentContent = $_POST['new_comment_content'];
 <body>
 
   <!-- Scrollable Region -->
-  <div class="center myRegion scrollable align-middle border rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
+  <div class="center myRegion scrollable align-middle rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
 
     <div class='container'>
 
@@ -84,12 +84,12 @@ $newCommentContent = $_POST['new_comment_content'];
       ?>
 
     </div>
-
   </div>
 
   <!-- Create post -->
   <div class="text-center" style="margin-top:100px">
-    <form action="create_user_post.php">      
+    <hr class="mb-4">
+    <form action="create_user_post.php">
       <button type="submit" class="btn btn-primary">Create post</button>
     </form>
   </div>
