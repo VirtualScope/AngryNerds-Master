@@ -54,7 +54,7 @@ $homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
             <a class="nav-link" href="' . $homepath . 'login_form.php">Login</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="' . $homepath . 'login_form.php">Sign up</a>
+            <a class="nav-link" href="' . $homepath . 'sign_up.php">Sign up</a>
             </li>    
         </ul>';
       }

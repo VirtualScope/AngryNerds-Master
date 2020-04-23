@@ -128,6 +128,19 @@ class DatabaseAccessLayer
         VALUES (" . $userId . ", " . ($new_comment_post_id) . ", '" . ($new_comment_post_content) . "')";
         return $this->query($sql);
     }
+    function count_users_by_identity($user_email) # Returns INT
+    {
+        $sql = "SELECT * FROM `users` WHERE email='$user_email'";
+        return $this->query($sql);
+    }
+    function create_user($fname, $lname, $email, $pass, $admin, $notes)
+    {
+        $now = 0; # They have not logged in yet! Set time to epoch 0 (1970)
+        $active = "yes";
+        $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `pass`, `admin`, `last_log_in`, `active`, `notes`) 
+        VALUES ('" . $fname . "', '" . ($lname) . "', '" . ($email) . "', '" . ($pass) . "', " . ($admin) . ", " . ($now) . ", '" . ($active) . "', '" . ($notes) . "')";
+        return $this->query($sql);
+    }
     private function query($sql)
     {        
         $result = $this->__dbcn->query($sql);
