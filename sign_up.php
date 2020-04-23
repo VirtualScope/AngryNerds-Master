@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    signUp($Database);
+    $errorMessage = signUp($Database);
 }
 
 ?>
@@ -61,6 +61,7 @@ if (isset($_POST['submit'])) {
             <!-- Image -->
             <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Create an account</h1>
+            <?php if (isset($errorMessage)) {echo "<div class=\"alert alert-danger\" role=\"alert\">" . $errorMessage . "</div>";}?>
             <!-- First Name -->
             <div class="row">
                 <div class="col">
@@ -123,13 +124,15 @@ function signUp($Database)
     // Query the DB for that user.    
     $result = $Database->count_users_by_identity($inputEmail);
     if ($result->num_rows === 0) {
-        $t = $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $aboutMe);
+        $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $aboutMe);
         header("Location: login_form.php");
 
     // User input failed, but the query was succesful.
     }
     else
-        $errorMessage = "User already exists";
+    {
+        return $errorMessage = "User already exists";
+    }
 }
 
 ?>

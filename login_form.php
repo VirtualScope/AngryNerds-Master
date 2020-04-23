@@ -29,7 +29,7 @@ if (!isset($_SESSION)) {
 
 // If the user has just clicked submit...
 if (isset($_POST['submit'])) {
-    attemptLogin($Database);
+    $errorMessage = attemptLogin($Database);
 }
 
 ?>
@@ -61,6 +61,8 @@ if (isset($_POST['submit'])) {
             <!-- Image -->
             <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <!-- Error Message -->
+            <?php if (isset($errorMessage)) {echo "<div class=\"alert alert-danger\" role=\"alert\">" . $errorMessage . "</div>";}?>
             <!-- Email -->
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
@@ -126,7 +128,7 @@ function attemptLogin($Database)
     }
     // User input failed, but the query was succesful.
     else
-        $errorMessage = "User name or password is incorrect";
+        return "User name or password is incorrect";
 }
 
 ?>
