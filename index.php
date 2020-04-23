@@ -98,16 +98,36 @@ include("includes/db_config.php");
                   <img class="card-img-top" src="images/' . $courseImage . '" alt="' . $courseCode . '" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                   <div class="card-body">
                     <p class="card-text"><b>' . $courseCode . '</b>: ' . $courseDescription . '</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <form class="btn-group" action="comments.php" method="post">
-                        <input id="courseId" type="hidden" name="courseId" value="' . $courseId . '"/>
-                        <button type="submit" class="btn btn-outline-secondary">View Forum</button>
+                    <div class="row">
+                      <form class="leftButton" ';
+
+                // If the user is an admin, show the button.
+                if (!$_SESSION['isAdmin']) {
+                  echo 'style="margin:0 auto;" ';
+                }
+
+                echo '
+                      action="comments.php" method="post">
+                        <input id="courseId" type="hidden" name="courseId" value="' . $courseId . '" />
+                        <button type="submit" class="btn btn-outline-primary">View Forum</button>
+                      </form>';
+
+                // If the user is an admin, show the button.
+                if ($_SESSION['isAdmin']) {
+                  echo '
+                      <form class="rightButton" action="modify_class.php" method="post">
+                        <input id="courseId" type="hidden" name="courseId" value="' . $courseId . '" />
+                        <button type="submit" class="btn btn-outline-secondary">Edit</button>
                       </form>
-                      <small class="text-muted">Jan 20 - May 20</small>
+                      ';
+                }
+
+                echo '
                     </div>
+                    <div class="text-center"><small class="text-muted">Jan 20 - May 20</small></div>
                   </div>
                 </div>
-              </div>    
+              </div>
                 ';
               }
             }
@@ -115,25 +135,23 @@ include("includes/db_config.php");
 
           ?>
 
-
-
-
+          <!-- No touch -->
         </div>
       </div>
     </div>
 
     <?php
-    
+
     // If the user is an admin, show the button.
-    if ($_SESSION['isAdmin']){      
+    if ($_SESSION['isAdmin']) {
 
       // Create Class
-      echo'
-      <div class="text-center" style="margin-top:100px">
+      echo '
+      <div class="text-center" style="margin: 0 auto">
       <form action="create_class.php">
         <button type="submit" class="btn btn-primary">Create class</button>
       </form>
-      </div>
+      </div> 
       ';
     }
 

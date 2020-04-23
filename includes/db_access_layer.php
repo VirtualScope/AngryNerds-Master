@@ -45,6 +45,27 @@ class DatabaseAccessLayer
         )";
         return $this->query($sql);
     }
+    function modify_class($classId, $classCode, $classDescription, $imageFileName){
+        $sql = "UPDATE `courses` SET `code` = '". $classCode ."', `description` = '". $classDescription ."', `image` = '". $imageFileName ."' WHERE `courses`.`id` = $classId";
+        return $this->query($sql);
+    }
+    function remove_class_forum_posts($classId){
+
+        $sql = "DELETE FROM `user_post_comment` WHERE `user_post_comment`.`user_post_id` = 
+        (SELECT id FROM user_post WHERE course_id = $classId)";
+        $this->query($sql);
+
+        $sql = "DELETE FROM `user_post` WHERE `user_post`.`course_id` = $classId";
+        $this->query($sql);
+    }
+    function remove_class_user_relationships($classId){       
+        $sql = "DELETE FROM `user_course` WHERE `user_course`.`course_id` = $classId";
+        return $this->query($sql);
+    }
+    function remove_class($classId){
+        $sql = "DELETE FROM `courses` WHERE `courses`.`id` = $classId";
+        return $this->query($sql);
+    }
     function add_class_user($classCode, $userId)
     {
         $sql = "INSERT INTO `user_course`(`course_id`, `user_id`) 
@@ -64,6 +85,10 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
         return $this->query($sql);
     }
+    function get_user_course($userId, $courseId){
+        $sql = "SELECT * FROM user_course WHERE course_id=$courseId AND user_id=$userId";
+        return $this->query($sql);
+    }
     function get_users()
     {
         $sql = "SELECT * FROM users";
@@ -71,6 +96,10 @@ class DatabaseAccessLayer
     }
     function get_class($classCode){
         $sql = "SELECT * FROM courses WHERE code = '$classCode'";
+        return $this->query($sql);
+    }
+    function get_class_by_id($courseId){
+        $sql = "SELECT * FROM courses WHERE id = $courseId";
         return $this->query($sql);
     }
     function get_classes($userId)
