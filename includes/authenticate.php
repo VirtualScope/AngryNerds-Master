@@ -7,6 +7,9 @@ if (!isset($_SESSION)) {
 
 // Assume all pages require login.
 $isLoggedIn = isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 'true';
+
+if (!isset($secured)) $secured = true; # If a page doesn't have $secured set, assume it's to be secured.
+
 if ($secured && !$isLoggedIn) {
     // Call the function validate_credentials($secured).
     validate_credentials($secured);

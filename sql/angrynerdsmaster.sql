@@ -67,7 +67,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `fname`, `lname`, `email`, `pass`, `admin`, `last_log_in`, `active`, `notes`) VALUES
-(1, 'Johnny', 'Appleseed', 'someone@example.com', 'Password123', 1, '2020-04-22 20:08:58', 'yes', 'Just some guy with a lot of work to do.');
+(1, 'Johnny', 'Appleseed', 'someone@example.com', '$2y$10$z/mh8lYXXlc903XqTC2e1eCVI.kFXJfpzl1e.iEzZFCbM9qYlRZ.2', 1, '2020-04-22 20:08:58', 'yes', 'Just some guy with a lot of work to do.');
 
 -- --------------------------------------------------------
 

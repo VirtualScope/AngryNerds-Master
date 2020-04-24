@@ -80,8 +80,8 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM `users` WHERE email='$inputEmail'"; # We only need one row, lets just hope there is never more than one row!
         $result = $this->query($sql);
         $row = $result->fetch_assoc();
-        $password = $row['pass'];
-        if ($password === $inputPassword) # password_verify() here for hashes.
+        $hash = $row['pass'];
+        if (password_verify($inputPassword, $hash))
         {
             $row['success'] = true;
             return $row;
@@ -143,34 +143,36 @@ class DatabaseAccessLayer
     {
         $now = 0; # They have not logged in yet! Set time to epoch 0 (1970)
         $active = "yes";
+        $hash = password_hash($pass, PASSWORD_DEFAULT);
         $sql = "INSERT INTO `users` (`fname`, `lname`, `email`, `pass`, `admin`, `last_log_in`, `active`, `notes`) 
-        VALUES ('" . $fname . "', '" . ($lname) . "', '" . ($email) . "', '" . ($pass) . "', " . ($admin) . ", " . ($now) . ", '" . ($active) . "', '" . ($notes) . "')";
+        VALUES ('" . $fname . "', '" . ($lname) . "', '" . ($email) . "', '" . ($hash) . "', " . ($admin) . ", " . ($now) . ", '" . ($active) . "', '" . ($notes) . "')";
         return $this->query($sql);
     }
     # Update functions
     function update_email($newEmail, $userId)
     {
-        $sql = "UPDATE users SET email='$newEmail' WHERE id='$userId'";
+        $sql = "UPDATE `users` SET email='$newEmail' WHERE id='$userId'";
         return $this->query($sql);
     }
     function update_password($newPassword, $userId)
     {
-        $sql = "UPDATE users SET email='$newPassword' WHERE id='$userId'";
+        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $sql = "UPDATE `users` SET pass='$hash' WHERE id='$userId'";
         return $this->query($sql);
     }
     function update_notes($newNotes, $userId)
     {
-        $sql = "UPDATE users SET email='$newNotes' WHERE id='$userId'";
+        $sql = "UPDATE `users` SET notes='$newNotes' WHERE id='$userId'";
         return $this->query($sql);
     }
     function update_fname($newFName, $userId)
     {
-        $sql = "UPDATE users SET email='$newFName' WHERE id='$userId'";
+        $sql = "UPDATE `users` SET fname='$newFName' WHERE id='$userId'";
         return $this->query($sql);
     }
     function update_lname($newLName, $userId)
     {
-        $sql = "UPDATE users SET email='$newLName' WHERE id='$userId'";
+        $sql = "UPDATE `users` SET lname='$newLName' WHERE id='$userId'";
         return $this->query($sql);
     }
     # Utility and Status Functions
