@@ -7,25 +7,24 @@ if (!isset($_SESSION)) {
 
 // Assume all pages require login.
 $isLoggedIn = isset($_SESSION['isLoggedIn']) && $_SESSION['isLoggedIn'] == 'true';
-if ($secured && $isLoggedIn == false) {
+if ($secured && !$isLoggedIn) {
     // Call the function validate_credentials($secured).
-    validate_credentials(true);
+    validate_credentials($secured);
+}
+else if (!$secured && $isLoggedIn) // Not ideal but if the user visits the only non-secured page which is the login currently, they shall be redirected.
+{
+    header("Location: index.php");
+    exit();
 }
 
 function validate_credentials($secured)
 {
-    if ($secured == 'true') {
+    if ($secured === true) {
         if (!isset($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] != 'true') {
             // Redirect the page to the login.php page.
             header("Location: login_form.php");
 
-            exit;
+            exit();
         }
-    }
-    else // Not ideal but if the user visits the only non-secured page which is the login currently, they shall be redirected.
-    {
-        header("Location: index.php");
-
-        exit;
     }
 }
