@@ -65,10 +65,10 @@ if (isset($_POST['submit'])) {
             <!-- First Name -->
             <div class="row">
                 <div class="col">
-                <input type="text" name="inputFirstName" class="form-control" placeholder="First name">
+                <input type="text" name="inputFirstName" class="form-control" placeholder="First name" required pattern="<?php echo substr($GLOBALS['FIRST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['FIRST_NAME_INVALID_ERROR'];?>">
                 </div>
                 <div class="col">
-                <input type="text" name="inputLastName" class="form-control" placeholder="Last name">
+                <input type="text" name="inputLastName" class="form-control" placeholder="Last name" required pattern="<?php echo substr($GLOBALS['LAST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['LAST_NAME_INVALID_ERROR'];?>">
                 </div>
             </div>
             <br>
@@ -78,11 +78,11 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required="">
+            <input type="password" id="inputPassword" name="inputPassword" required pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Text Area -->
             <label for="notes">About Me</label>
-            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+            <textarea class="form-control" id="notes" name="notes" rows="3" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"></textarea>
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
@@ -136,6 +136,7 @@ function signUp($Database)
     $result = $Database->count_users_by_identity($inputEmail);
     if ($result->num_rows === 0) {
         $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $notes);
+        $_SESSION["account_creation"] = "success";
         header("Location: login_form.php");
 
     // User input failed, but the query was succesful.

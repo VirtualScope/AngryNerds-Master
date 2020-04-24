@@ -61,6 +61,13 @@ if (isset($_POST['submit'])) {
             <!-- Image -->
             <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+            <!-- Sign up Success Message -->
+            <?php if (isset($_SESSION["account_creation"]) && $_SESSION["account_creation"] === "success") 
+            {
+                echo "<div class=\"alert alert-success\" role=\"alert\">Account Successfully Created!</div>";
+                $_SESSION["account_creation"] = ""; // Remove the success message on refresh.
+            }
+            ?>
             <!-- Error Message -->
             <?php if (isset($errorMessage)) {echo "<div class=\"alert alert-danger\" role=\"alert\">" . $errorMessage . "</div>";}?>
             <!-- Email -->
@@ -68,7 +75,7 @@ if (isset($_POST['submit'])) {
             <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="inputPassword" pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password" required="">
+            <input type="password" id="inputPassword" name="inputPassword" required pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password">
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
