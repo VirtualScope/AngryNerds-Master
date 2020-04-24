@@ -73,13 +73,14 @@ if (isset($_POST['submit'])) {
             <!-- Email -->
             <label for="inputEmail" class="sr-only">Email address</label>
             <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <br>
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" name="inputPassword" required pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password">
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">© 2020</p>
+            <!--<p class="mt-5 mb-3 text-muted">© 2020</p>-->
         </form>
     </div>
 
@@ -115,24 +116,24 @@ function attemptLogin($Database)
        return "Invalid email or password format!"; # Client side gives instant feedback, this is to stop bad clients.
    }
 
-
     // Query the DB for that user.    
     $result = $Database->check_credentials($inputEmail, $inputPassword);
-    if (!$result) {
-        header("Location: login_form.php");
+    if (!$result['success']) { # If user was not found or password is incorrect. Note to future students: It's bad practice to show if an account exists...
+        return "Username or Password is incorrect";
     }
-
-    // If our query was successful...
-    $numRows = $result->num_rows;
-    if ($numRows > 0) {
+    else if (!isset($result))
+    {
+        return "An unknown error has occurred!";
+    }
+    else
+    {
         // Get the DB row.
         session_regenerate_id();
-        $row = $result->fetch_assoc();
-        $userId = $row['id'];
-        $fname = $row['fname'];
-        $lname = $row['lname'];
-        $email = $row['email'];
-        $isAdmin = $row['admin'];
+        $userId = $result['id'];
+        $fname = $result['fname'];
+        $lname = $result['lname'];
+        $email = $result['email'];
+        $isAdmin = $result['admin'];
 
         // Set session variables and reroute to the main page.
         $_SESSION['isLoggedIn'] = true;
@@ -144,9 +145,5 @@ function attemptLogin($Database)
 
         header("Location: index.php");
     }
-    // User input failed, but the query was succesful.
-    else
-        return "Username or Password is incorrect";
 }
-
 ?>

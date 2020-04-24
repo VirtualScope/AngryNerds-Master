@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
-            <p class="mt-5 mb-3 text-muted">© 2020</p>
+            <!--<p class="mt-5 mb-3 text-muted">© 2020</p>-->
         </form>
     </div>
 

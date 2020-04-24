@@ -75,15 +75,21 @@ class DatabaseAccessLayer
         )";
         return $this->query($sql);
     }
-    function update_email($newEmail, $userId, $currentPassword)
+    function check_credentials($inputEmail, $inputPassword) # Future TODO (outside of this class scope): Add additional checks to verify no two accounts use the same email!
     {
-        $sql = "UPDATE users SET email='$newEmail' WHERE id='$userId' AND pass='$currentPassword' ";
-        return $this->query($sql);
-    }
-    function check_credentials($inputEmail, $inputPassword)
-    {
-        $sql = "SELECT * FROM users WHERE email='$inputEmail' AND pass='$inputPassword'";
-        return $this->query($sql);
+        $sql = "SELECT * FROM `users` WHERE email='$inputEmail'"; # We only need one row, lets just hope there is never more than one row!
+        $result = $this->query($sql);
+        $row = $result->fetch_assoc();
+        $password = $row['pass'];
+        if ($password === $inputPassword) # password_verify() here for hashes.
+        {
+            $row['success'] = true;
+            return $row;
+        }
+        else
+        {
+            return;
+        }
     }
     function get_user_course($userId, $courseId){
         $sql = "SELECT * FROM user_course WHERE course_id=$courseId AND user_id=$userId";
@@ -105,7 +111,7 @@ class DatabaseAccessLayer
     function get_classes($userId)
     {        
         $sql = "SELECT course_id FROM user_course WHERE user_id=$userId";        
-        return $this->__dbcn->query($sql);
+        return $this->query($sql);
     }
     function get_course_database($courseId)
     {
@@ -141,6 +147,33 @@ class DatabaseAccessLayer
         VALUES ('" . $fname . "', '" . ($lname) . "', '" . ($email) . "', '" . ($pass) . "', " . ($admin) . ", " . ($now) . ", '" . ($active) . "', '" . ($notes) . "')";
         return $this->query($sql);
     }
+    # Update functions
+    function update_email($newEmail, $userId)
+    {
+        $sql = "UPDATE users SET email='$newEmail' WHERE id='$userId'";
+        return $this->query($sql);
+    }
+    function update_password($newPassword, $userId)
+    {
+        $sql = "UPDATE users SET email='$newPassword' WHERE id='$userId'";
+        return $this->query($sql);
+    }
+    function update_notes($newNotes, $userId)
+    {
+        $sql = "UPDATE users SET email='$newNotes' WHERE id='$userId'";
+        return $this->query($sql);
+    }
+    function update_fname($newFName, $userId)
+    {
+        $sql = "UPDATE users SET email='$newFName' WHERE id='$userId'";
+        return $this->query($sql);
+    }
+    function update_lname($newLName, $userId)
+    {
+        $sql = "UPDATE users SET email='$newLName' WHERE id='$userId'";
+        return $this->query($sql);
+    }
+    # Utility and Status Functions
     private function query($sql)
     {        
         $result = $this->__dbcn->query($sql);
