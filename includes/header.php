@@ -29,7 +29,7 @@ $homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
 
         <!-- Home button 
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo $homepath ?>index.php">Home</a>
+          <a class="nav-link" href="(PHP HOMEPATH HERE) index.php">Home</a>
         </li>-->
       </ul>
 
