@@ -65,10 +65,24 @@ if (isset($_POST['submit'])) {
             <!-- First Name -->
             <div class="row">
                 <div class="col">
-                <input type="text" name="inputFirstName" class="form-control" placeholder="First name" required pattern="<?php echo substr($GLOBALS['FIRST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['FIRST_NAME_INVALID_ERROR'];?>">
+                <input type="text" name="inputFirstName" class="form-control" placeholder="First name" required pattern="<?php echo substr($GLOBALS['FIRST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['FIRST_NAME_INVALID_ERROR'];?>"
+                    <?php
+                        if (isset($_SESSION) && isset($_SESSION['firstNameRemember']))
+                        {
+                            echo "value=" . $_SESSION['firstNameRemember'];
+                        }
+                    ?>
+                >
                 </div>
                 <div class="col">
-                <input type="text" name="inputLastName" class="form-control" placeholder="Last name" required pattern="<?php echo substr($GLOBALS['LAST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['LAST_NAME_INVALID_ERROR'];?>">
+                <input type="text" name="inputLastName" class="form-control" placeholder="Last name" required pattern="<?php echo substr($GLOBALS['LAST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['LAST_NAME_INVALID_ERROR'];?>"
+                    <?php
+                        if (isset($_SESSION) && isset($_SESSION['lastNameRemember']))
+                        {
+                            echo "value=" . $_SESSION['lastNameRemember'];
+                        }
+                    ?>
+                >
                 </div>
             </div>
             <br>
@@ -82,7 +96,7 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- Text Area -->
             <label for="notes">About Me</label>
-            <textarea class="form-control" id="notes" name="notes" rows="3" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"></textarea>
+            <textarea class="form-control" id="notes" name="notes" rows="3" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"><?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?></textarea>
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
@@ -127,8 +141,24 @@ function signUp($Database)
     array_push($results, boolval(preg_match($GLOBALS['PASSWORD_VALID'], $inputPassword)));
     array_push($results, boolval(preg_match($GLOBALS['NOTES_VALID'], $notes)));
 
+    function saveInput($results) 
+    {
+        if ($results[0] === true) // Only remember the input IF it was valid!
+        {
+            $_SESSION["firstNameRemember"] = $_POST['inputFirstName'];
+        }
+        if ($results[1] === true)
+        {
+            $_SESSION["lastNameRemember"] = $_POST['inputLastName'];
+        }
+        if ($results[4] === true) // If the notes area is valid, remember it. This might same some pain for someone in the future...
+        {
+            $_SESSION["notesRemember"] = $_POST['notes'];
+        }
+    }
     if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
     {
+        saveInput($results);
         return "Invalid input in one or more fields!"; # Client side gives instant feedback, this is to stop bad clients.
     }
 
@@ -137,12 +167,16 @@ function signUp($Database)
     if ($result->num_rows === 0) {
         $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $notes);
         $_SESSION["account_creation"] = "success";
+        unset($_SESSION['firstNameRemember']);
+        unset($_SESSION['lastNameRemember']);
+        unset($_SESSION["notesRemember"]); // No need to remember the user inputs anymore!
         header("Location: login_form.php");
 
     // User input failed, but the query was succesful.
     }
     else
     {
+        saveInput($results);
         return "User already exists";
     }
 }
