@@ -44,11 +44,16 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 
 <body>
 
+  <!-- Create post -->
+  <div class="text-center" style="margin-top:100px">
+    <hr class="mb-4">
+    <form action="create_user_post.php">
+      <button type="submit" class="btn btn-primary">Create Post</button>
+    </form>
+  </div>
   <!-- Scrollable Region -->
   <div class="center myRegion scrollable align-middle rounded col-sm-12 col-md-10 col-lg-8 col-xl-6" style="max-width:800px;">
-
     <div class='container'>
-
       <?php
 
       // ============== Load posts from DB ==============
@@ -84,14 +89,6 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
       ?>
 
     </div>
-  </div>
-
-  <!-- Create post -->
-  <div class="text-center" style="margin-top:100px">
-    <hr class="mb-4">
-    <form action="create_user_post.php">
-      <button type="submit" class="btn btn-primary">Create post</button>
-    </form>
   </div>
 
 </body>
@@ -209,7 +206,7 @@ function displayUserPost($Database, $userPostId, $title, $content, $created_date
         <input type="text" class="form-control" name="new_comment_content" placeholder="Comment...">
         <input type="hidden" class="form-control" name="new_comment_post_id" value="' . $userPostId . '">
       </div>
-      <button type="submit" class="col-3 mb-2 btn btn-outline-primary">Post</button>
+      <button type="submit" class="col-3 mb-2 btn btn-outline-primary">Comment</button>
     </form>
   </div>
   ';

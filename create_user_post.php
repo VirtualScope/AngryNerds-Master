@@ -27,8 +27,9 @@ if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
 
     // Image processing.
     $fileName = basename($_FILES["fileToUpload"]["name"]);
-    $target_file = "images/" . $fileName;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $imageFileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    $targetFile = uniqid() . '.' . $imageFileType;
+    $fullPath = 'images/' . $targetFile;
 
     // Allow only certain file formats
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
@@ -37,12 +38,11 @@ if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
     }
 
     // Try to upload the file.
-    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fullPath)) { # Replace uniqid to have picture name as filename.
         echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
     }
 
-    // TODO: Change courseID from a SESSION variable to a variable that is sent by the page.
-    $result = $Database->add_post($_POST['postTitle'], $_POST['postContent'], $_SESSION['userId'], $_SESSION['courseId'], $fileName);
+    $result = $Database->add_post($_POST['postTitle'], $_POST['postContent'], $_SESSION['userId'], $_SESSION['courseId'], $targetFile);
     if (!$result) {
         echo ("<p>Failed to save post :{</p>");
         exit;
