@@ -81,8 +81,8 @@ if (isset($_POST['submit'])) {
             <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Text Area -->
-            <label for="aboutMe">About Me</label>
-            <textarea class="form-control" id="aboutMe" name="aboutMe" rows="3"></textarea>
+            <label for="notes">About Me</label>
+            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
@@ -109,7 +109,7 @@ function signUp($Database)
     $inputLastName = "";
     $inputEmail = "";
     $inputPassword = "";
-    $aboutMe = "";
+    $notes = "";
     $isAdmin = 0;
     $results = [];
 
@@ -118,14 +118,14 @@ function signUp($Database)
     if (isset($_POST['inputLastName'])) $inputLastName = trim($_POST['inputLastName']);
     if (isset($_POST['inputEmail'])) $inputEmail = trim($_POST['inputEmail']);
     if (isset($_POST['inputPassword'])) $inputPassword = trim($_POST['inputPassword']);
-    if (isset($_POST['aboutMe'])) $aboutMe = trim($_POST['aboutMe']);
+    if (isset($_POST['notes'])) $notes = trim($_POST['notes']);
 
     // Input Regex Checking goes here.
-    array_push($results, boolval(preg_match("/[A-Z][A-z]+/", $inputFirstName)));
-    array_push($results, boolval(preg_match("/[A-Z][A-z]+/", $inputLastName)));
+    array_push($results, boolval(preg_match($GLOBALS["FIRST_NAME_VALID"], $inputFirstName)));
+    array_push($results, boolval(preg_match($GLOBALS["LAST_NAME_VALID"], $inputLastName)));
     array_push($results, boolval(filter_var($inputEmail, FILTER_VALIDATE_EMAIL)));
-    array_push($results, boolval(preg_match("/(\w|\d|[@#\$%\^&]){8,99}/", $inputPassword)));
-    array_push($results, boolval(preg_match("/(\s|\w|\d|[@#\$%\^&]){0,999}/", $aboutMe)));
+    array_push($results, boolval(preg_match($GLOBALS['PASSWORD_VALID'], $inputPassword)));
+    array_push($results, boolval(preg_match($GLOBALS['NOTES_VALID'], $notes)));
 
     if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
     {
@@ -135,7 +135,7 @@ function signUp($Database)
     // Query the DB for that user.    
     $result = $Database->count_users_by_identity($inputEmail);
     if ($result->num_rows === 0) {
-        $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $aboutMe);
+        $Database->create_user($inputFirstName, $inputLastName, $inputEmail, $inputPassword, $isAdmin, $notes);
         header("Location: login_form.php");
 
     // User input failed, but the query was succesful.

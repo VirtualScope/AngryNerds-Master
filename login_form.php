@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
             <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required="">
+            <input type="password" id="inputPassword" name="inputPassword" pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign in</button>
@@ -93,6 +93,7 @@ function attemptLogin($Database)
     // Define variables.
     $inputEmail = "";
     $inputPassword = "";
+    $results = [];
 
     // Collect input from the user.
     if (isset($_POST['inputEmail'])) $inputEmail = trim($_POST['inputEmail']);
@@ -100,11 +101,11 @@ function attemptLogin($Database)
 
    // Input Regex Checking goes here.
    array_push($results, boolval(filter_var($inputEmail, FILTER_VALIDATE_EMAIL)));
-   array_push($results, boolval(preg_match("/(\w|\d|[@#\$%\^&]){8,99}/", $inputPassword)));
+   array_push($results, boolval(preg_match($GLOBALS['PASSWORD_VALID'], $inputPassword)));
 
    if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
    {
-       return "Invalid input in one or more fields!"; # Client side gives instant feedback, this is to stop bad clients.
+       return "Invalid email or password format!"; # Client side gives instant feedback, this is to stop bad clients.
    }
 
 
@@ -138,7 +139,7 @@ function attemptLogin($Database)
     }
     // User input failed, but the query was succesful.
     else
-        return "User name or password is incorrect";
+        return "Username or Password is incorrect";
 }
 
 ?>

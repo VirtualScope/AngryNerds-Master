@@ -1,5 +1,6 @@
 <?php
 require("authenticate.php"); # This creates a session.bg-cover
+require("validate.php");
 
 $displayName;
 if (isset($_SESSION['fname']))
