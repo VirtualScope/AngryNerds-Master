@@ -14,17 +14,23 @@ $homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container">
-    <a class="navbar-brand" href="<?php echo $homepath . 'login_form.php' ?>"><img src="<?php echo $homepath ?>images/logo2.png" width=140 height=30></a>
+    <a class="navbar-brand" href="
+    <?php
+      if ($isLoggedIn)
+        echo $homepath . 'index.php';
+      else
+        echo $homepath . 'login_form.php';
+    ?>"><img src="<?php echo $homepath ?>images/logo2.png" width=140 height=30></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
 
-        <!-- Home button -->
+        <!-- Home button 
         <li class="nav-item">
           <a class="nav-link" href="<?php echo $homepath ?>index.php">Home</a>
-        </li>
+        </li>-->
       </ul>
 
       <?php
