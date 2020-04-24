@@ -51,6 +51,22 @@ include("includes/db_config.php");
       </div>
     </section>
 
+    <?php
+
+    // If the user is an admin, show the button.
+    if ($_SESSION['isAdmin']) {
+
+      // Create Class
+      echo '
+      <div class="text-center" style="margin: 0 auto">
+        <form action="create_class.php">
+          <button type="submit" class="btn btn-primary">Create Class</button>
+        </form>
+      </div> 
+      ';
+    }
+
+    ?>
     <div class="album py-5 bg-light">
       <div class="container">
         <div class="row">
@@ -139,23 +155,6 @@ include("includes/db_config.php");
         </div>
       </div>
     </div>
-
-    <?php
-
-    // If the user is an admin, show the button.
-    if ($_SESSION['isAdmin']) {
-
-      // Create Class
-      echo '
-      <div class="text-center" style="margin: 0 auto">
-      <form action="create_class.php">
-        <button type="submit" class="btn btn-primary">Create class</button>
-      </form>
-      </div> 
-      ';
-    }
-
-    ?>
   </main>
 
 
