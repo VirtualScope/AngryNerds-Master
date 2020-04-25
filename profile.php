@@ -192,7 +192,7 @@ function updateProfile($Database)
         echo "
         <script>
         window.onload = (event) => {
-            document.getElementById(\"profileName\").innerHTML = \"$inputLastName\";
+            document.getElementById(\"profileName\").innerHTML = \"$inputFirstName\";
           };
         </script>";
         return "Successfully Updated!";
