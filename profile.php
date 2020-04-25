@@ -187,6 +187,8 @@ function updateProfile($Database)
         unset($_SESSION['profileFirstNameRemember']);
         unset($_SESSION['profileLastNameRemember']);
         unset($_SESSION["profileNotesRemember"]); // No need to remember the user inputs anymore!
+        $_SESSION['fname'] = $inputFirstName;
+        $_SESSION['lname'] = $inputLastName;
         return "Successfully Updated!";
     }
     else
