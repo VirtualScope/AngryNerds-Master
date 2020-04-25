@@ -45,7 +45,7 @@ $homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
         echo '
             <ul class="navbar-nav ml-auto">
               <li class="nav-text"><i class="fas fa-user"></i>
-              <a href="profile.php" >' . $displayName . '</a>
+              <a id="profileName" href="profile.php" >' . $displayName . '</a>
               </li>';
 
         // Logout button

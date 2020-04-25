@@ -189,6 +189,12 @@ function updateProfile($Database)
         unset($_SESSION["profileNotesRemember"]); // No need to remember the user inputs anymore!
         $_SESSION['fname'] = $inputFirstName;
         $_SESSION['lname'] = $inputLastName;
+        echo "
+        <script>
+        window.onload = (event) => {
+            document.getElementById(\"profileName\").innerHTML = \"$inputLastName\";
+          };
+        </script>";
         return "Successfully Updated!";
     }
     else
@@ -197,3 +203,4 @@ function updateProfile($Database)
         return "An unknown error has occurred";
     }
 }
+?>
