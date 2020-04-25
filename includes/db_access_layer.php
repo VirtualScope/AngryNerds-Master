@@ -100,6 +100,11 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM users";
         return $this->query($sql);
     }
+    function get_user($id)
+    {
+        $sql = "SELECT * FROM users WHERE id = $id";
+        return $this->query($sql);
+    }
     function get_class($classCode){
         $sql = "SELECT * FROM courses WHERE code = '$classCode'";
         return $this->query($sql);

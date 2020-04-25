@@ -18,7 +18,9 @@ include("includes/bootstrap.php");
 require("includes/db_config.php");
 
 // ============== Variables ==============
-
+$firstNameValue = "";
+$lastNameValue = "";
+$notesValue = "";
 
 // ============== Operations ==============
 
@@ -31,7 +33,23 @@ if (!isset($_SESSION)) {
 if (isset($_POST['submit'])) {
     updateProfile($Database);
 }
+if (isset($_SESSION) && isset($_SESSION['notesRemember']))     $notesValue    = $_SESSION['notesRemember'];
+if (isset($_SESSION) && isset($_SESSION['firstNameRemember'])) $firstNameValue = $_SESSION['firstNameRemember'];
+if (isset($_SESSION) && isset($_SESSION['lastNameRemember']))  $lastNameValue = $_SESSION['lastNameRemember'];
 
+# TODO (Future) Add a message notifying the data was saved from an invalid submission and was not updated.
+if ($notesValue === "" || $firstNameValue === "" || $lastNameValue === "") # Sames computation time if one of these 3 is not equal. We can then do the individual checks inside.
+{
+    $returned = $Database->get_user($_SESSION['userId']);
+    $user = $returned->fetch_array();
+    $_notes = $user['notes'];
+    $_fname = $user['fname'];
+    $_lname = $user['lname'];
+    
+    if ($firstNameValue === "") $firstNameValue = $_fname;
+    if ($lastNameValue === "")  $lastNameValue  = $_lname;
+    if ($notesValue === "")     $notesValue     = $_notes;
+}
 ?>
 
 <html lang="en">
@@ -68,20 +86,14 @@ if (isset($_POST['submit'])) {
                 <div class="col">
                 <input type="text" name="inputFirstName" class="form-control" placeholder="First name" pattern="<?php echo substr($GLOBALS['FIRST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['FIRST_NAME_INVALID_ERROR'];?>"
                     <?php
-                        if (isset($_SESSION) && isset($_SESSION['firstNameRemember']))
-                        {
-                            echo "value=" . $_SESSION['firstNameRemember'];
-                        }
+                        echo "value=" . $firstNameValue;
                     ?>
                 >
                 </div>
                 <div class="col">
                 <input type="text" name="inputLastName" class="form-control" placeholder="Last name" pattern="<?php echo substr($GLOBALS['LAST_NAME_VALID'],1,-1);?>" title="<?php echo $GLOBALS['LAST_NAME_INVALID_ERROR'];?>"
                     <?php
-                        if (isset($_SESSION) && isset($_SESSION['lastNameRemember']))
-                        {
-                            echo "value=" . $_SESSION['lastNameRemember'];
-                        }
+                        echo "value=" . $lastNameValue;
                     ?>
                 >
                 </div>
@@ -97,7 +109,7 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- Text Area -->
             <label for="notes">About Me</label>
-            <textarea class="form-control" id="notes" name="notes" rows="3" pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"><?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?></textarea>
+            <textarea class="form-control" id="notes" name="notes" rows="3" pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"><?php echo $notesValue;?></textarea>
             <br>
             <!-- Current Password -->
             <p>We need additional verification to make sure it's you!</p>
