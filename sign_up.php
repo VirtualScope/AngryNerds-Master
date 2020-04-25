@@ -88,15 +88,14 @@ if (isset($_POST['submit'])) {
             <br>
             <!-- Email -->
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+            <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" value="<?php if (isset($_SESSION) && isset($_SESSION['emailRemember'])) echo $_SESSION['emailRemember']; ?>">
             <br>
             <!-- Password -->
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" name="inputPassword" required pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Text Area -->
-            <label for="notes">About Me</label>
-            <textarea class="form-control" id="notes" name="notes" rows="3" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>"><?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?></textarea>
+            <input placeholder="Notes" type="text" class="form-control" id="notes" name="notes" rows="3" data-error="error" data-pattern-error="error_text" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>" value="<?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?>">
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
@@ -143,23 +142,16 @@ function signUp($Database)
 
     function saveInput($results) 
     {
-        if ($results[0] === true) // Only remember the input IF it was valid!
-        {
-            $_SESSION["firstNameRemember"] = $_POST['inputFirstName'];
-        }
-        if ($results[1] === true)
-        {
-            $_SESSION["lastNameRemember"] = $_POST['inputLastName'];
-        }
-        if ($results[4] === true) // If the notes area is valid, remember it. This might same some pain for someone in the future...
-        {
-            $_SESSION["notesRemember"] = $_POST['notes'];
-        }
+        $_SESSION["firstNameRemember"] = $_POST['inputFirstName'];
+        $_SESSION["lastNameRemember"] = $_POST['inputLastName'];
+        $_SESSION["emailRemember"] = $_POST['inputEmail'];
+        $_SESSION["notesRemember"] = $_POST['notes'];
     }
     if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
     {
         saveInput($results);
-        return "Invalid input in one or more fields!"; # Client side gives instant feedback, this is to stop bad clients.
+        if (!boolval(filter_var($inputEmail, FILTER_VALIDATE_EMAIL))) return "Invalid Email Input! Valid Example: someone@example.com"; # HTML validation only looks for test@test
+        return "Invalid inputs in one or more fields."; # Client side gives instant feedback, this is to stop bad clients.
     }
 
     // Query the DB for that user.    
@@ -169,6 +161,7 @@ function signUp($Database)
         $_SESSION["account_creation"] = "success";
         unset($_SESSION['firstNameRemember']);
         unset($_SESSION['lastNameRemember']);
+        unset($_SESSION['inputEmail']);
         unset($_SESSION["notesRemember"]); // No need to remember the user inputs anymore!
         header("Location: login_form.php");
 
