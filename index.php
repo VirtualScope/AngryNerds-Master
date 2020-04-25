@@ -47,7 +47,7 @@ include("includes/db_config.php");
     <section class="jumbotron text-center">
       <div class="container">
         <h1 class="jumbotron-heading">Classes</h1>
-        <p class="lead text-muted">This is an announcement. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
+        <p class="lead text-muted">Coronavirus (COVID-19) Update: Students may request a change to grading for Spring 2020 courses to Competence/No Competence (S/NC).</p>
       </div>
     </section>
 

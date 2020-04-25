@@ -144,7 +144,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
     <div class="container">
         <div class="py-5 text-center">
             <h2>Create Class</h2>
-            <p class="lead">A place for users to create and share content.</p>
+            <p class="lead">“Never let the fear of striking out keep you from playing the game.” – Babe Ruth</p>
         </div>
 
         <!-- Input fields -->
