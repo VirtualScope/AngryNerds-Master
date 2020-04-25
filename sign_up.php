@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Login</title>
+    <title>Create Account</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
         <form class="form-signin" method="post">
             <br>
             <!-- Image -->
-            <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
+            <img class="mb-4" src="images/ProfilePicture.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Create an account</h1>
             <?php if (isset($errorMessage)) {echo "<div class=\"alert alert-danger\" role=\"alert\">" . $errorMessage . "</div>";}?>
             <!-- First Name -->

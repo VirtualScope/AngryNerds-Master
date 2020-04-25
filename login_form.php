@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
         <form class="form-signin" method="post">
             <br>
             <!-- Image -->
-            <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
+            <img class="mb-4" src="images/ProfilePicture.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
             <!-- Sign up Success Message -->
             <?php if (isset($_SESSION["account_creation"]) && $_SESSION["account_creation"] === "success") 
