@@ -143,6 +143,10 @@ class DatabaseAccessLayer
         $sql = "SELECT * FROM `users` WHERE email='$user_email'";
         return $this->query($sql);
     }
+    function set_current_timestamp_for_user($userId){
+        $sql ="UPDATE `users` SET last_log_in=CURRENT_TIMESTAMP WHERE id='$userId'";
+        return $this->query($sql);
+    }
     function create_user($fname, $lname, $email, $pass, $admin, $notes)
     {
         $now = 0; # They have not logged in yet! Set time to epoch 0 (1970)

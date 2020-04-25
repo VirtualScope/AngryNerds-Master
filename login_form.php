@@ -143,6 +143,9 @@ function attemptLogin($Database)
         $_SESSION['email'] = $email;
         $_SESSION['isAdmin'] = $isAdmin;
 
+        // Set last logged in for this user.
+        $Database->set_current_timestamp_for_user($userId);
+
         header("Location: index.php");
     }
 }
