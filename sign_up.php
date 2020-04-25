@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
             <input type="password" id="inputPassword" name="inputPassword" required pattern="<?php echo substr($GLOBALS['PASSWORD_VALID'],1,-1);?>" title="<?php echo $GLOBALS['PASSWORD_INVALID_ERROR'];?>" class="form-control" placeholder="Password" required="">
             <br>
             <!-- Text Area -->
-            <input placeholder="Notes" type="text" class="form-control" id="notes" name="notes" rows="3" data-error="error" data-pattern-error="error_text" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>" value="<?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?>">
+            <input placeholder="Notes" type="text" class="form-control" id="notes" name="notes" data-error="error" data-pattern-error="error_text" required pattern="<?php echo substr($GLOBALS['NOTES_VALID'],1,-1);?>" title="<?php echo $GLOBALS['NOTES_INVALID_ERROR'];?>" value="<?php if (isset($_SESSION) && isset($_SESSION['notesRemember'])) echo $_SESSION['notesRemember']; ?>">
             <br>
             <!-- Submit -->
             <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
