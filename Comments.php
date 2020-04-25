@@ -41,6 +41,7 @@ if (isset($_POST['new_comment_content']) && isset($_POST['new_comment_post_id'])
 
 <!DOCTYPE html>
 <html>
+<title>Forum</title>
 
 <body>
 
@@ -145,13 +146,13 @@ function displayUserPost($Database, $userPostId, $title, $content, $created_date
     
       <!-- Reveal Comments -->
       <p>
-        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection' . $userPostId . '" role="button"  aria-controls="commentSection">
+        <a class="btn btn-outline-secondary" data-toggle="collapse" href="#commentSection' . $userPostId . '" role="button" aria-expanded="true" aria-controls="commentSection">
           Comments
         </a>
       </p>
     
       <!-- Comment -->
-      <div class="collapse in" id="commentSection' . $userPostId . '">';
+      <div class="collapse show in" id="commentSection' . $userPostId . '">';
 
   // ================= START Comments Section =================
 
