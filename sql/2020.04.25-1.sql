@@ -18,6 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+
 --
 -- Database: `angrynerdsmaster`
 --
@@ -81,6 +82,11 @@ CREATE TABLE `user_course` (
   `course_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP DATABASE IF EXISTS angrynerdsmaster;
+CREATE DATABASE angrynerdsmaster;
+USE angrynerdsmaster;
+
 
 --
 -- Dumping data for table `user_course`
