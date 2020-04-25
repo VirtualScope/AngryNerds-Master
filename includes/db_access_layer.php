@@ -95,6 +95,22 @@ class DatabaseAccessLayer
             return;
         }
     }
+    function check_credentials_by_id($id, $inputPassword) # Future TODO (outside of this class scope): Add additional checks to verify no two accounts use the same email!
+    {
+        $sql = "SELECT * FROM `users` WHERE id='$id'"; # We only need one row, lets just hope there is never more than one row!
+        $result = $this->query($sql);
+        $row = $result->fetch_assoc();
+        $hash = $row['pass'];
+        if (password_verify($inputPassword, $hash))
+        {
+            $row['success'] = true;
+            return $row;
+        }
+        else
+        {
+            return;
+        }
+    }
     function get_user_course($userId, $courseId){
         $sql = "SELECT * FROM user_course WHERE course_id=$courseId AND user_id=$userId";
         return $this->query($sql);
@@ -167,26 +183,40 @@ class DatabaseAccessLayer
         $sql = "UPDATE `users` SET email='$newEmail' WHERE id='$userId'";
         return $this->query($sql);
     }
-    function update_password($newPassword, $userId)
+    function update_user_by_id($id, $current_password, $fname, $lname, $pass, $notes)
     {
-        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-        $sql = "UPDATE `users` SET pass='$hash' WHERE id='$userId'";
-        return $this->query($sql);
-    }
-    function update_notes($newNotes, $userId)
-    {
-        $sql = "UPDATE `users` SET notes='$newNotes' WHERE id='$userId'";
-        return $this->query($sql);
-    }
-    function update_fname($newFName, $userId)
-    {
-        $sql = "UPDATE `users` SET fname='$newFName' WHERE id='$userId'";
-        return $this->query($sql);
-    }
-    function update_lname($newLName, $userId)
-    {
-        $sql = "UPDATE `users` SET lname='$newLName' WHERE id='$userId'";
-        return $this->query($sql);
+        $response = $this->check_credentials_by_id($id, $current_password);
+        if ($response["success"])
+        {
+            $active = "yes";            
+            $_fname = "";
+            $_lname = "";
+            $_pass  = "";
+            $_notes = "";
+    
+            $returned = $this->get_user($id);
+            $result = $returned->fetch_assoc();
+
+            $old_fname = $result["fname"];
+            $old_lname = $result["lname"];
+            $old_pass  = $result["pass"];
+            $old_notes = $result["notes"];
+    
+            $_fname = ($fname === "")? $old_fname : $fname;
+            $_lname = ($lname === "")? $old_lname : $lname;
+    
+            $_pass = ($pass === "")? $old_pass : $pass;
+            $hash = password_hash($_pass, PASSWORD_DEFAULT);
+    
+            $_notes = ($notes === "")? $old_notes : $notes;
+    
+            $sql = "UPDATE `users` SET `fname`='$_fname', `lname`='$_lname', `pass`='$hash', `active`='$active', `notes`='$_notes' WHERE `id`=$id";
+            return $this->query($sql);
+        }
+        else
+        {
+            return null; # Null response means the current password failed.
+        }
     }
     # Utility and Status Functions
     private function query($sql)
