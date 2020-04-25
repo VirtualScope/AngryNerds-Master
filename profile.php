@@ -77,7 +77,7 @@ if ($notesValue === "" || $firstNameValue === "" || $lastNameValue === "") # Sam
         <form class="form-signin" method="post">
             <br>
             <!-- Image -->
-            <img class="mb-4" src="images/ImageNotFound.png" alt="" width="72" height="72">
+            <img class="mb-4" src="images/ProfilePicture.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Update Profile</h1>
             <p>Fill out what you want to change! Leave the rest blank.</p>
             <?php if (isset($errorMessage)) {echo "<div class=\"alert alert-danger\" role=\"alert\">" . $errorMessage . "</div>";}?>
