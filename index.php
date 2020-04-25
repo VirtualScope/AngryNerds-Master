@@ -107,6 +107,11 @@ include("includes/db_config.php");
                 $courseDescription = $courseRow['description'];
                 $courseImage = $courseRow['image'];
 
+                // If the image is somehow missing, use the ImageNotFound placeholder.
+                if (!file_exists('images/'.$courseImage)) {
+                  $courseImage = 'ImageNotFound.png';
+                }
+
                 // Display the course in the list.
                 echo '  
                 <div class="col-md-4">

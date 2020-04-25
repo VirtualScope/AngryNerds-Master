@@ -116,6 +116,11 @@ function displayUserPost($Database, $userPostId, $title, $content, $created_date
     $lname = $userRow['lname'];
   }
 
+  // If the image is somehow missing, use the ImageNotFound placeholder.
+  if (!file_exists('images/'.$image)) {
+    $image = 'ImageNotFound.png';
+  }
+
   echo '
     
     <!-- User post card -->
