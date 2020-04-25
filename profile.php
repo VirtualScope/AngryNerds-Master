@@ -165,18 +165,9 @@ function updateProfile($Database)
 
     function saveInput($results) 
     {
-        if ($results[0] === true) // Only remember the input IF it was valid!
-        {
-            $_SESSION["firstNameRemember"] = $_POST['inputFirstName'];
-        }
-        if ($results[1] === true)
-        {
-            $_SESSION["lastNameRemember"] = $_POST['inputLastName'];
-        }
-        if ($results[4] === true) // If the notes area is valid, remember it. This might same some pain for someone in the future...
-        {
-            $_SESSION["notesRemember"] = $_POST['notes'];
-        }
+        $_SESSION["firstNameRemember"] = $_POST['inputFirstName'];
+        $_SESSION["lastNameRemember"] = $_POST['inputLastName'];
+        $_SESSION["notesRemember"] = $_POST['notes'];
     }
     if (in_array(false, $results) === true) # in_array returns TRUE if one or more FALSE values are found inside the array.
     {
