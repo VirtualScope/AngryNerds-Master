@@ -203,13 +203,13 @@ function displayUserPost($Database, $userPostId, $title, $content, $created_date
       </div>
       ';
     }
-  }
+  }  
 
   echo '        
   <div class="card card-body">
     <form class="row" method="post">
       <div class="form-group col-9 mb-2">
-        <input type="text" class="form-control" name="new_comment_content" placeholder="Comment...">
+        <input type="text" class="form-control" required pattern="'. substr($GLOBALS['USER_COMMENT_VALID'],1,-1) .'" title="'. $GLOBALS['USER_COMMENT_INVALID_ERROR'] .'" name="new_comment_content" placeholder="Comment...">
         <input type="hidden" class="form-control" name="new_comment_post_id" value="' . $userPostId . '">
       </div>
       <button type="submit" class="col-3 mb-2 btn btn-outline-primary">Comment</button>

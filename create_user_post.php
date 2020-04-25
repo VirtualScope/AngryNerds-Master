@@ -87,7 +87,8 @@ if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
                 <!-- Post Title -->
                 <div class="col-md-6 mb-3">
                     <label for="postTitle">Title</label>
-                    <input type="text" class="form-control" id="postTitle" name="postTitle" placeholder="" value="" required="">
+                    <input type="text" class="form-control" id="postTitle" name="postTitle" placeholder="" value="" 
+                    required pattern="<?php echo substr($GLOBALS['USER_POST_TITLE_VALID'],1,-1);?>" title="<?php echo $GLOBALS['USER_POST_TITLE_INVALID_ERROR'];?>">
                     <div class="invalid-feedback">
                         Valid post title is required.
                     </div>
@@ -96,7 +97,8 @@ if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
                 <div class="col-12">
                     <div class="form-group">
                         <label for="postContent">Content</label>
-                        <input type="textarea" class="form-control" rows="5" id="postContent" name="postContent" placeholder="" value="" required=""></input>
+                        <input type="textarea" class="form-control" rows="5" id="postContent" name="postContent" placeholder="" value="" 
+                        required pattern="<?php echo substr($GLOBALS['USER_POST_CONTENT_VALID'],1,-1);?>" title="<?php echo $GLOBALS['USER_POST_CONTENT_INVALID_ERROR'];?>"></input>
                         <div class="invalid-feedback">
                             Valid post content is required.
                         </div>

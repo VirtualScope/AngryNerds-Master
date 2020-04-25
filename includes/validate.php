@@ -13,4 +13,31 @@ $GLOBALS['PASSWORD_INVALID_ERROR'] = "Acceptable Characters: Letters, Numbers, a
 
 $GLOBALS['NOTES_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()'$`]){0,1000}$/";
 $GLOBALS['NOTES_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 1000 characters.";
+
+// ============= user_post_comment table =============
+
+// Comment
+$GLOBALS['USER_COMMENT_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()'$`]){0,250}$/";
+$GLOBALS['USER_COMMENT_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 250 characters.";
+
+// ============= user_post table =============
+
+// Title
+$GLOBALS['USER_POST_TITLE_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()'$`]){0,150}$/";
+$GLOBALS['USER_POST_TITLE_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 150 characters.";
+
+// Content
+$GLOBALS['USER_POST_CONTENT_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()'$`]){0,1000}$/";
+$GLOBALS['USER_POST_CONTENT_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 1000 characters.";
+
+// ============= courses table =============
+
+// Code
+$GLOBALS['COURSE_CODE_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()-'$`]){0,20}$/";
+$GLOBALS['COURSE_CODE_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 20 characters.";
+
+// Description
+$GLOBALS['COURSE_DESCRIPTION_VALID'] = "/^(\s|\w|\d|[#%^&?.!,()'$`]){0,200}$/";
+$GLOBALS['COURSE_DESCRIPTION_INVALID_ERROR'] = "Can only contain letters, numbers, spaces, and a few common symbols. Maximum 200 characters.";
+
 ?>

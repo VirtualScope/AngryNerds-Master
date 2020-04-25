@@ -153,7 +153,8 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
                 <!-- Class Code -->
                 <div class="col-md-6 mb-3">
                     <label for="ClassCode">Class Code</label>
-                    <input type="text" class="form-control" id="ClassCode" name="ClassCode" placeholder="ICS-325-A" value="" required="">
+                    <input type="text" class="form-control" id="ClassCode" name="ClassCode" placeholder="ICS-325-A" value=""
+                    required pattern="<?php echo substr($GLOBALS['COURSE_CODE_VALID'],1,-1);?>" title="<?php echo $GLOBALS['COURSE_CODE_INVALID_ERROR'];?>">
                     <div class="invalid-feedback">
                         Valid class course code is required.
                     </div>
@@ -162,7 +163,8 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
                 <div class="col-12">
                     <div class="form-group">
                         <label for="ClassDescription">Description</label>
-                        <input type="textarea" class="form-control" rows="5" id="ClassDescription" name="ClassDescription" placeholder="" value="" required=""></input>
+                        <input type="textarea" class="form-control" rows="5" id="ClassDescription" name="ClassDescription" placeholder="" value="" 
+                        required pattern="<?php echo substr($GLOBALS['COURSE_DESCRIPTION_VALID'],1,-1);?>" title="<?php echo $GLOBALS['COURSE_DESCRIPTION_INVALID_ERROR'];?>"></input>
                         <div class="invalid-feedback">
                             Valid class description is required.
                         </div>
