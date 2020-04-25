@@ -36,7 +36,7 @@ if (!$result) {
 // ============== Operations (delete) ==============
 
 if (array_key_exists('delete', $_POST)) {
-    
+
     // Delete Forum posts    
     $Database->remove_class_forum_posts($_SESSION['courseId']);
 
@@ -84,27 +84,38 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
 
     // Image processing.
     $fileName = basename($_FILES["fileToUpload"]["name"]);
-    $target_file = "images/" . $fileName;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Allow only certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "<div class='text-center'>Invalid file format.</div>";
-        exit;
+    // If the user doesn't choose an image, keep the old image.
+    if ($fileName != "") {
+        $target_file = "images/" . $fileName;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Allow only certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+            echo "<div class='text-center'>Invalid file format.</div>";
+            exit;
+        }
+
+        // Try to upload the file.
+        if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
+        }
+
+        // Save the course (with the image).
+        $result = $Database->modify_class_with_image(
+            $_SESSION['courseId'],
+            $classCode,
+            $classDescription,
+            $fileName
+        );
+    } else {
+        // Save the course.
+        $result = $Database->modify_class(
+            $_SESSION['courseId'],
+            $classCode,
+            $classDescription
+        );
     }
-
-    // Try to upload the file.
-    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
-    }
-
-    // Save the course.
-    $result = $Database->modify_class(
-        $_SESSION['courseId'],
-        $classCode,
-        $classDescription,
-        $fileName
-    );
 
     // If the query failed...
     if (!$result) {
@@ -227,13 +238,10 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
 
                 <!-- Image -->
                 <div class="col-md-6 mb-3">
-                    <label>Image</label>
+                    <label>Image (optional)</label>
                     <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload" required="true">
+                        <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload">
                         <label class="custom-file-label" for="customFile">Choose...</label>
-                        <div class="invalid-feedback">
-                            Image is required.
-                        </div>
                     </div>
                 </div>
 

@@ -45,7 +45,11 @@ class DatabaseAccessLayer
         )";
         return $this->query($sql);
     }
-    function modify_class($classId, $classCode, $classDescription, $imageFileName){
+    function modify_class($classId, $classCode, $classDescription){
+        $sql = "UPDATE `courses` SET `code` = '". $classCode ."', `description` = '". $classDescription ."' WHERE `courses`.`id` = $classId";
+        return $this->query($sql);
+    }
+    function modify_class_with_image($classId, $classCode, $classDescription, $imageFileName){
         $sql = "UPDATE `courses` SET `code` = '". $classCode ."', `description` = '". $classDescription ."', `image` = '". $imageFileName ."' WHERE `courses`.`id` = $classId";
         return $this->query($sql);
     }
