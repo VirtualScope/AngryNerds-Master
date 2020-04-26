@@ -205,12 +205,11 @@ class DatabaseAccessLayer
             $_fname = ($fname === "")? $old_fname : $fname;
             $_lname = ($lname === "")? $old_lname : $lname;
     
-            $_pass = ($pass === "")? $old_pass : $pass;
-            $hash = password_hash($_pass, PASSWORD_DEFAULT);
+            $_pass = ($pass === "")? $old_pass : password_hash($pass, PASSWORD_DEFAULT);
     
             $_notes = ($notes === "")? $old_notes : $notes;
     
-            $sql = "UPDATE `users` SET `fname`='$_fname', `lname`='$_lname', `pass`='$hash', `active`='$active', `notes`='$_notes' WHERE `id`=$id";
+            $sql = "UPDATE `users` SET `fname`='$_fname', `lname`='$_lname', `pass`='$_pass', `active`='$active', `notes`='$_notes' WHERE `id`=$id";
             return $this->query($sql);
         }
         else
