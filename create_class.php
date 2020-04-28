@@ -48,8 +48,9 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
 
     // Image processing.
     $fileName = basename($_FILES["fileToUpload"]["name"]);
-    $target_file = "images/" . $fileName;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $imageFileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    $targetFile = uniqid() . '.' . $imageFileType;
+    $fullPath = 'images/' . $targetFile;
 
     // Allow only certain file formats
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
@@ -58,7 +59,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
     }
 
     // Try to upload the file.
-    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fullPath)) { # Replace uniqid to have picture name as filename.
         echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
     }
 
@@ -66,7 +67,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
     $result = $Database->add_class(
         $classCode,
         $classDescription,
-        $fileName
+        $targetFile
     );
 
     // If the query failed...

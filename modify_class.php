@@ -85,28 +85,30 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
     // Image processing.
     $fileName = basename($_FILES["fileToUpload"]["name"]);
 
+    // Allow only certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+        echo "<div class='text-center'>Invalid file format.</div>";
+        exit;
+    }
+
+    // Try to upload the file.
+    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fullPath)) { # Replace uniqid to have picture name as filename.
+        echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
+    }
+
     // If the user doesn't choose an image, keep the old image.
-    if ($fileName != "") {
-        $target_file = "images/" . $fileName;
+    if ($targetFile != "") {
+        $fullPath = 'images/' . $targetFile;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $targetFile = uniqid() . '.' . $imageFileType;
 
-        // Allow only certain file formats
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-            echo "<div class='text-center'>Invalid file format.</div>";
-            exit;
-        }
-
-        // Try to upload the file.
-        if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
-        }
 
         // Save the course (with the image).
         $result = $Database->modify_class_with_image(
             $_SESSION['courseId'],
             $classCode,
             $classDescription,
-            $fileName
+            $targetFile
         );
     } else {
         // Save the course.
