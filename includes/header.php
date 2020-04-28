@@ -9,7 +9,7 @@ else
   $displayName = "Anonymous";
 
 $homepath = '../AngryNerds-Master/'; //'http://'.$_SERVER['SERVER_NAME'].'/';
-$webserver_root = '';
+$webserver_root = '/opt/bitnami/apache2/htdocs/AngryNerds-Master/';
 ?>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
