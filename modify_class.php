@@ -82,26 +82,25 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
         }
     }
 
-    // Image processing.
-    $fileName = basename($_FILES["fileToUpload"]["name"]);
-
-    // Allow only certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "<div class='text-center'>Invalid file format.</div>";
-        exit;
-    }
-
-    // Try to upload the file.
-    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fullPath)) { # Replace uniqid to have picture name as filename.
-        echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
-    }
-
     // If the user doesn't choose an image, keep the old image.
     if ($targetFile != "") {
         $fullPath = $webserver_root . 'images/' . $targetFile;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $targetFile = uniqid() . '.' . $imageFileType;
 
+        // Image processing.
+        $fileName = basename($_FILES["fileToUpload"]["name"]);
+
+        // Allow only certain file formats
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+            echo "<div class='text-center'>Invalid file format.</div>";
+            exit;
+        }
+
+        // Try to upload the file.
+        if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fullPath)) { # Replace uniqid to have picture name as filename.
+            echo "<div class='text-center'>An error was encountered while uploading the file.</div>";
+        }
 
         // Save the course (with the image).
         $result = $Database->modify_class_with_image(
@@ -210,8 +209,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
                 <!-- Class Code -->
                 <div class="col-md-6 mb-3">
                     <label for="ClassCode">Class Code</label>
-                    <input type="text" class="form-control" id="ClassCode" name="ClassCode" placeholder="ICS-325-A" <?php echo "value='" . $code . "'" ?>
-                    required pattern="<?php echo substr($GLOBALS['COURSE_CODE_VALID'],1,-1);?>" title="<?php echo $GLOBALS['COURSE_CODE_INVALID_ERROR'];?>">
+                    <input type="text" class="form-control" id="ClassCode" name="ClassCode" placeholder="ICS-325-A" <?php echo "value='" . $code . "'" ?> required pattern="<?php echo substr($GLOBALS['COURSE_CODE_VALID'], 1, -1); ?>" title="<?php echo $GLOBALS['COURSE_CODE_INVALID_ERROR']; ?>">
                     <div class="invalid-feedback">
                         Valid class course code is required.
                     </div>
@@ -220,8 +218,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
                 <div class="col-12">
                     <div class="form-group">
                         <label for="ClassDescription">Description</label>
-                        <input type="textarea" class="form-control" rows="5" id="ClassDescription" name="ClassDescription" placeholder="" <?php echo "value='" . $description . "'" ?> 
-                        required pattern="<?php echo substr($GLOBALS['COURSE_DESCRIPTION_VALID'],1,-1);?>" title="<?php echo $GLOBALS['COURSE_DESCRIPTION_INVALID_ERROR'];?>"></input>
+                        <input type="textarea" class="form-control" rows="5" id="ClassDescription" name="ClassDescription" placeholder="" <?php echo "value='" . $description . "'" ?> required pattern="<?php echo substr($GLOBALS['COURSE_DESCRIPTION_VALID'], 1, -1); ?>" title="<?php echo $GLOBALS['COURSE_DESCRIPTION_INVALID_ERROR']; ?>"></input>
                         <div class="invalid-feedback">
                             Valid class description is required.
                         </div>
