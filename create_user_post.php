@@ -29,7 +29,7 @@ if (isset($_POST['postTitle']) && isset($_POST['postContent'])) {
     $fileName = basename($_FILES["fileToUpload"]["name"]);
     $imageFileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     $targetFile = uniqid() . '.' . $imageFileType;
-    $fullPath = 'images/' . $targetFile;
+    $fullPath = $webserver_root . 'images/' . $targetFile;
 
     // Allow only certain file formats
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {

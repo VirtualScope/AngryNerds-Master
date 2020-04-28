@@ -98,7 +98,7 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
 
     // If the user doesn't choose an image, keep the old image.
     if ($targetFile != "") {
-        $fullPath = 'images/' . $targetFile;
+        $fullPath = $webserver_root . 'images/' . $targetFile;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         $targetFile = uniqid() . '.' . $imageFileType;
 
