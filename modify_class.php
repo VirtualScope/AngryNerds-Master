@@ -83,13 +83,13 @@ if (isset($classCode) && isset($classDescription) && isset($userAssoc)) {
     }
 
     // If the user doesn't choose an image, keep the old image.
-    if ($targetFile != "") {
 
         // Image processing.    
         $fileName = basename($_FILES["fileToUpload"]["name"]);
         $imageFileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
         $targetFile = uniqid() . '.' . $imageFileType;
         $fullPath = $webserver_root . 'images/' . $targetFile;
+        if ($targetFile != "") {
 
         // Allow only certain file formats
         if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
